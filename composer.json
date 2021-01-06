@@ -12,7 +12,8 @@
         }
     ],
     "require": {
-        "typo3/cms-core": "^10.4"
+        "typo3/cms-core": "^10.4",
+        "symfony/dotenv": "^4.4"
     },
     "autoload": {
         "psr-4": {
