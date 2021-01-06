@@ -1,0 +1,25 @@
+{
+    "name": "site/site-core",
+    "type": "typo3-cms-extension",
+    "description": "Core Extension for a TYPO3 Application.",
+    "version": "1.0",
+    "authors": [
+        {
+            "name": "Mati",
+            "email": "mati_01@icloud.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "typo3/cms-core": "^10.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Site\\Core\\": "Classes/"
+        }
+    },
+    "suggest": {
+        "site/site-backend": "Should be used in combination with core's TCA-Service to build incredible-fast Content-Elements or configure backend with a clean API.",
+        "site/site-frontend": "Same as above just for your frontend."
+    }
+}
