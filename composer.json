@@ -2,6 +2,7 @@
     "name": "site/site-core",
     "type": "typo3-cms-extension",
     "description": "Core Extension for a TYPO3 Application.",
+    "license": "GPL-2.0-or-later",
     "version": "1.0",
     "authors": [
         {
