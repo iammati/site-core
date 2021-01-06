@@ -3,7 +3,8 @@
     "type": "typo3-cms-extension",
     "description": "Core Extension for a TYPO3 Application.",
     "license": "GPL-2.0-or-later",
-    "version": "1.0",
+    "version": "1.0.0",
+    "minimum-stability": "stable",
     "authors": [
         {
             "name": "Mati",
