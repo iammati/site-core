@@ -13,10 +13,10 @@ class EnvVars
      */
     protected static function getEnvContent()
     {
-        $path = realpath($_SERVER['DOCUMENT_ROOT'].'/../.env');
+        $path = realpath($_SERVER['DOCUMENT_ROOT'] . '/../.env');
 
         if (!$path) {
-            $path = realpath($_SERVER['DOCUMENT_ROOT'].'.env');
+            $path = realpath($_SERVER['DOCUMENT_ROOT'] . '.env');
         }
 
         if (!$path) {
@@ -62,21 +62,25 @@ class EnvVars
                 $line = str_replace('__', '.', $line);
                 // $line = implode('=', explode('=', $line));
 
-                $generatedEnvTs .= $line."\n";
+                $generatedEnvTs .= $line . "\n";
             }
         }
 
         if (is_dir('./public/typo3conf/ext/' . getenv('FRONTEND_EXT'))) {
-            $envTsFilePath = './public/typo3conf/ext/'.getenv('FRONTEND_EXT').'/Configuration/TypoScript/Constants/environment.ts';
+            $envTsFilePath = './public/typo3conf/ext/' . getenv('FRONTEND_EXT') . '/Configuration/TypoScript/Constants/environment.ts';
 
             if (file_exists($envTsFilePath)) {
                 unlink($envTsFilePath);
             }
 
-            $envTsFile = fopen($envTsFilePath, 'w+');
+            if (is_writable($envTsFilePath)) {
+                $envTsFile = fopen($envTsFilePath, 'w+');
 
-            fwrite($envTsFile, $generatedEnvTs);
-            fclose($envTsFile);
+                fwrite($envTsFile, $generatedEnvTs);
+                fclose($envTsFile);
+            } else {
+                echo "\n EnvVars detected '" . $envTsFilePath . "' as a non-writable-path.";
+            }
         }
     }
 
