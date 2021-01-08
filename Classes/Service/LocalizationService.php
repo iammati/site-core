@@ -227,7 +227,13 @@ class LocalizationService
         $context = GeneralUtility::makeInstance(Context::class);
         $id = $context->getPropertyFromAspect('language', 'id');
 
-        return getenv('LANG_'.$id);
+        $envVal = getenv('LANG_' . $id);
+
+        if ($envVal === false) {
+            ExceptionUtility::throw('The env "LANG_' . $id . '" has not been configured properly!');
+        }
+
+        return $envVal;
     }
 
     /**
