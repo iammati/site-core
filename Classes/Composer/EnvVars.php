@@ -66,8 +66,8 @@ class EnvVars
             }
         }
 
-        if (is_dir('./public/typo3conf/ext/' . getenv('FRONTEND_EXT'))) {
-            $envTsFilePath = './public/typo3conf/ext/' . getenv('FRONTEND_EXT') . '/Configuration/TypoScript/Constants/environment.ts';
+        if (is_dir('./public/typo3conf/ext/' . getenv('FRONTEND_EXT') ?? '')) {
+            $envTsFilePath = './public/typo3conf/ext/' . getenv('FRONTEND_EXT') ?? '' . '/Configuration/TypoScript/Constants/environment.ts';
 
             if (file_exists($envTsFilePath)) {
                 unlink($envTsFilePath);
