@@ -8,10 +8,10 @@ return FieldUtility::createByConfig([
 
     'config' => [
         'type' => 'check',
-        'default' => '',
+        'default' => 0,
 
         'items' => [
-            ['', ''],
+            0 => ['', ''],
         ],
     ],
 ], $config);
