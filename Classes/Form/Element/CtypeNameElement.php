@@ -27,14 +27,7 @@ class CtypeNameElement extends AbstractFormElement
         /** @var ApplicationContext */
         $envContext = Environment::getContext();
 
-        // $slIdentifier = 'LLL:EXT:'.getenv('BACKEND_EXT').'/Resources/Private/Language/Backend/ContentElements/CTypes/locallang.xlf:'.$CType;
-        // $label = $this->getLanguageService()->sL($slIdentifier);
-
-        // if (!$label) {
-        //     $label = $slIdentifier;
-        // }
-
-        $identifier = 'Backend.ContentElements:'.str_replace('ce_', '', $CType);
+        $identifier = 'Backend.ContentElements:'.getCeByCtype($CType, false);
         $label = ll(getenv('BACKEND_EXT'), $identifier)['title'] ?? $identifier;
 
         $iconIdentifier = TCAService::generateIconIdentifier($CType);

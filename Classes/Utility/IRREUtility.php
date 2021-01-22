@@ -4,37 +4,78 @@ declare(strict_types=1);
 
 namespace Site\Core\Utility;
 
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class IRREUtility
 {
     /**
      * Returns Doctrine Statement which its result can call fetch or fetchAll method.
      *
-     * @param int|string $parentid  The value used to compare using $fieldName-parameter.
-     * @param string $tableName The table name for the where-condition.
-     * @param string $fieldName The column name for the where-condition.
-     * @param int|string $language_id The sys_language_uid value - by default reading it from $GLOBALS['TSFE']-array.
-     * @param int|string $fallback_language_id The fallback uid of the sys_language in case GLOBALS-TSFE fails or isn't set since it didn't initialized yet.
+     * @param int|string $parentid  the value used to compare using $fieldName-parameter
+     * @param string     $tableName the table name for the where-condition
+     * @param string     $fieldName the column name for the where-condition
      *
      * @return \Doctrine\DBAL\Driver\Statement
      */
-    public static function findByUid($parentid, $tableName, $fieldName, $language_id, $fallback_language_id = 0)
+    public static function findByUid($parentid, $tableName, $fieldName = 'parentid')
     {
-        if (!$language_id) {
-            $language_id = $GLOBALS['TSFE']->sys_language_uid ?? $fallback_language_id;
-        }
+        $context = GeneralUtility::makeInstance(Context::class);
+        $languageId = $context->getPropertyFromAspect('language', 'id');
 
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($tableName);
 
         return $queryBuilder
             ->select('*')
             ->from($tableName)
+
             ->where(
                 $queryBuilder->expr()->eq($fieldName, $parentid),
-                $queryBuilder->expr()->eq('sys_language_uid', $language_id),
+                $queryBuilder->expr()->eq('sys_language_uid', $languageId),
             )
-        ->execute();
+            ->execute();
+    }
+
+    /**
+     * Returns Doctrine Statement which its result can call fetch or fetchAll method.
+     *
+     * @param int|string $parentid   the value used to compare using $fieldName-parameter
+     * @param string     $tableName  the table name for the where-condition
+     * @param string     $fieldName  the column name for the where-condition
+     * @param mixed      $repository
+     *
+     * @return \Doctrine\DBAL\Driver\Statement
+     */
+    public static function resolveByRepository($parentid, $tableName, $fieldName = 'parentid', $repository)
+    {
+        $pid = $GLOBALS['TSFE']->id;
+
+        $context = GeneralUtility::makeInstance(Context::class);
+        $languageId = $context->getPropertyFromAspect('language', 'id');
+
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($tableName);
+
+        $rows = $queryBuilder
+            ->select('uid')
+            ->from($tableName)
+
+            ->where(
+                $queryBuilder->expr()->eq($fieldName, $parentid),
+                $queryBuilder->expr()->eq('pid', $pid),
+                $queryBuilder->expr()->eq('sys_language_uid', $languageId),
+            )
+            ->execute()
+            ->fetchAllAssociative();
+
+        $models = [];
+
+        foreach ($rows as $row) {
+            $uid = $row['uid'];
+
+            $models[] = $repository->findByUid($uid);
+        }
+
+        return $models;
     }
 }
