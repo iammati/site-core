@@ -21,12 +21,7 @@ class StandaloneViewUtility
      *
      * @throws Exception
      */
-    public static function render(
-        array $rootPaths = null,
-        string $template = null,
-        array $assign = null,
-        bool $echo = false
-    ) {
+    public static function render(array $rootPaths = null, string $template = null, array $assign = null, bool $echo = false) {
         $exWord = '';
 
         if (is_null($rootPaths)) {
@@ -38,7 +33,7 @@ class StandaloneViewUtility
         }
 
         if ($exWord != '') {
-            throw new Exception('StandaloneViewUtility - can\'t render a view without $exWord');
+            throw new Exception('StandaloneViewUtility - can\'t render a view without '.$exWord);
         }
 
         $standaloneView = GeneralUtility::makeInstance(\TYPO3\CMS\Fluid\View\StandaloneView::class);

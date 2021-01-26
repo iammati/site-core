@@ -44,7 +44,7 @@ class AjaxMiddleware implements MiddlewareInterface
                 $path = substr($path, 0, -1);
             }
 
-            $ajaxId = $queryParams['vendor'].'/'.$queryParams['ajax'];
+            $ajaxId = $queryParams['vendor'] . '/' . $queryParams['ajax'];
 
             $method = 'process';
 
@@ -55,7 +55,7 @@ class AjaxMiddleware implements MiddlewareInterface
                 if (StrUtility::contains($key, '-')) {
                     $splittedKey = explode('-', explode('/', $key)[1]);
 
-                    if (explode('-', $queryParams['ajax'])[0] == $splittedKey[0] && $splittedKey[1] == '*') {
+                    if (explode('-', $queryParams['ajax'])[0] == $splittedKey[0] && '*' == $splittedKey[1]) {
                         if ($cfg['overwriteDynamicMethod']) {
                             $method = $cfg['overwriteDynamicMethod'];
                         } else {
@@ -76,7 +76,7 @@ class AjaxMiddleware implements MiddlewareInterface
             $classInstance->setServerRequest($request);
             $classInstance->setRequestHandler($handler);
 
-            return new HtmlResponse($classInstance->$method([
+            return new HtmlResponse($classInstance->{$method}([
                 'post' => $postParams,
                 'query' => $queryParams,
             ]));

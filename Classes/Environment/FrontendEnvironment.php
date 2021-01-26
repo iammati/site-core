@@ -10,7 +10,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class FrontendEnvironment implements SingletonInterface
 {
-    private $tsfe = null;
+    private $tsfe;
 
     public function __construct(Tsfe $tsfe = null)
     {

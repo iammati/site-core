@@ -1,5 +1,7 @@
 <?php
 
+$columns = implode(',', array_keys($additionalConfig['columns']));
+
 $ctrlArr = [
     'ctrl' => [
         'title' => '{TITLE_FIELD}',
@@ -20,7 +22,7 @@ $ctrlArr = [
             'endtime' => 'endtime',
         ],
 
-        'searchFields' => '{SEARCH_FIELDS}',
+        'searchFields' => $columns,
     ],
 
     'palettes' => [
@@ -43,9 +45,8 @@ $ctrlArr = [
     'types' => [
         '1' => [
             'showitem' => '
-                --div--;{TAB_NAME},
-                    {SHOW_ITEMS},
-                    parentid,
+                --div--;' . $additionalConfig['title'] . ',
+                    ' . $columns . ',
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,
                     --palette--;;language,
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
