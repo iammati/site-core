@@ -43,9 +43,7 @@ class CtypeNameElement extends AbstractFormElement
             [
                 'Templates' => 'EXT:'.getenv('CORE_EXT').'/Resources/Private/Backend/',
             ],
-
             'Form/Element/CtypeName',
-
             [
                 'data' => [
                     'uid' => $uid,

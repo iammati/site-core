@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Site\Core\Service;
 
+use Site\Core\Helper\ConfigHelper;
 use Site\Core\Utility\ExceptionUtility;
 use Site\Core\Utility\StrUtility;
 use Symfony\Component\Finder\Finder;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -161,52 +163,69 @@ class LocalizationService
      */
     public function findByKey(string $extKey, string $key)
     {
-        $envContext = Environment::getContext();
+        $backendExt = getenv('BACKEND_EXT');
+        $localizationType = ConfigHelper::get($backendExt, 'localizationType');
+
         $localizedStr = '';
 
-        $language = $this->getLanguage();
+        switch ($localizationType) {
+            case 'XLIFF':
+                $key = str_replace('.', '/', $key);
+                $key = str_replace(':', '.xlf:', $key);
+                $input = 'LLL:EXT:' . $extKey . '/Resources/Private/Language/' . $key;
+                $localizedStr = $this->getLanguageService()->sL($input);
+                break;
 
-        if (!isset($this->getLocalizationService()[$extKey])) {
-            if ($envContext->isDevelopment()) {
-                $localizedStr = 'EXT:'.$extKey.' has not been configured yet for the LocalizationService!';
-            }
+            case 'custom':
+                $language = $this->getLanguage();
 
-            if ($envContext->isProduction()) {
-                $localizedStr = '';
-            }
-        } else {
-            $config = $this->getLocalizationService()[$extKey];
-            $localizations = $config['localizations'];
-
-            if (StrUtility::contains($key, '.') || StrUtility::contains($key, ':')) {
-                $explodedKey = explode('.', $key);
-                $implodedKey = implode('/', $explodedKey);
-
-                $explodedPathLabel = explode(':', $implodedKey);
-
-                $extPath = ExtensionManagementUtility::extPath($extKey);
-
-                foreach ($config['definitions'] as $definition) {
-                    $path = $extPath.$definition.$language.'/'.$explodedPathLabel[0].'.php';
-
-                    if (!file_exists($path)) {
-                        ExceptionUtility::throw('LocalizationService: The "'.$path.'" localization-file does not exists!');
-                    }
-
-                    $locallizedArr = include $path;
-                    $locallizedKey = $locallizedArr[$explodedPathLabel[1]];
-
-                    if (isset($locallizedKey)) {
-                        $localizedStr = $locallizedKey;
-                    }
-                }
-            } else {
-                if (isset($localizations[$language][$key])) {
-                    $localizedStr = $localizations[$language][$key];
+                if (!isset($this->getLocalizationService()[$extKey])) {
+                    $localizedStr = 'EXT:'.$extKey.' has not been configured yet for the LocalizationService!';
                 } else {
-                    ExceptionUtility::throw('LocalizationService: The "'.$extKey.'" localizations does not contain a key for "'.$key.'" for language "'.$language.'".');
+                    $config = $this->getLocalizationService()[$extKey];
+                    $localizations = $config['localizations'];
+
+                    if (StrUtility::contains($key, '.') || StrUtility::contains($key, ':')) {
+                        $explodedKey = explode('.', $key);
+                        $implodedKey = implode('/', $explodedKey);
+
+                        $explodedPathLabel = explode(':', $implodedKey);
+
+                        $extPath = ExtensionManagementUtility::extPath($extKey);
+
+                        foreach ($config['definitions'] as $definition) {
+                            $path = $extPath.$definition.$language.'/'.$explodedPathLabel[0].'.php';
+
+                            if (!file_exists($path)) {
+                                ExceptionUtility::throw('LocalizationService: The "'.$path.'" localization-file does not exists!');
+                            }
+
+                            $locallizedArr = include $path;
+                            $locallizedKey = $locallizedArr[$explodedPathLabel[1]];
+
+                            if (isset($locallizedKey)) {
+                                $localizedStr = $locallizedKey;
+                            }
+                        }
+                    } else {
+                        if (isset($localizations[$language][$key])) {
+                            $localizedStr = $localizations[$language][$key];
+                        } else {
+                            ExceptionUtility::throw('LocalizationService: The "'.$extKey.'" localizations does not contain a key for "'.$key.'" for language "'.$language.'".');
+                        }
+                    }
                 }
-            }
+                break;
+
+            default:
+                ExceptionUtility::throw(
+                    sprintf(
+                        'There must be a configured localizationType to either "XLIFF" or "custom" inside EXT:%s/Config.php:localizationType value to handle whether you want to use XLIFF or EXT:%s\'s custom ll-function!',
+                        $backendExt,
+                        $backendExt
+                    )
+                );
+                break;
         }
 
         return $localizedStr;
@@ -239,7 +258,7 @@ class LocalizationService
     /**
      * @return LanguageService
      */
-    protected function getLanguageService()
+    protected function getLanguageService(): LanguageService
     {
         return $GLOBALS['LANG'];
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Site\Core\Composer;
 
+use Site\Core\Utility\StrUtility;
 use Symfony\Component\Dotenv\Dotenv;
 
 class EnvLoader
