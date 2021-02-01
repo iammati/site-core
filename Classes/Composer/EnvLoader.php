@@ -38,6 +38,10 @@ class EnvLoader
             $rootPath .= '/'.$node;
         }
 
+        if (StrUtility::startsWith($rootPath, '//')) {
+            $rootPath = $_SERVER['DOCUMENT_ROOT'] . '/' . $node;
+        }
+
         return $rootPath;
     }
 }
