@@ -41,11 +41,11 @@ if (!function_exists('env')) {
      *
      * @param string $key
      *
-     * @return string
+     * @return string|null
      */
-    function env(string $key): string
+    function env(string $key)
     {
-        $value = env($key);
+        $value = getenv($key);
 
         if (!$value) {
             $value = $_ENV[$key];
