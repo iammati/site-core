@@ -3,7 +3,7 @@
     "type": "typo3-cms-extension",
     "description": "Core Extension for a TYPO3 Application.",
     "license": "GPL-2.0-or-later",
-    "version": "1.0.8",
+    "version": "1.1.0",
     "minimum-stability": "stable",
     "authors": [
         {
@@ -24,5 +24,10 @@
     "suggest": {
         "site/site-backend": "Should be used in combination with core's TCA-Service to build incredible-fast Content-Elements or configure backend with a clean API.",
         "site/site-frontend": "Same as above just for your frontend."
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "Site\\Core\\Composer\\EnvLoader::postAutoloadDump"
+        ]
     }
 }

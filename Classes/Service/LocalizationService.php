@@ -163,8 +163,8 @@ class LocalizationService
      */
     public function findByKey(string $extKey, string $key)
     {
-        $backendExt = getenv('BACKEND_EXT');
-        $localizationType = ConfigHelper::get($backendExt, 'localizationType');
+        $backendExt = getenv('BACKEND_EXT') ?: 'BACKEND_EXT';
+        $localizationType = ConfigHelper::get($backendExt, 'localizationType') ?? 'custom';
 
         $localizedStr = '';
 

@@ -1,5 +1,8 @@
 <?php
 
+// To avoid problems using in the CLI the typo3_console composer-package
+// the helper-functions will work in any other request-type except the CLI itself.
+
 use Site\Core\Composer\EnvLoader;
 use Site\Core\Service\LocalizationService;
 use Site\Core\Utility\ExceptionUtility;
@@ -7,8 +10,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 (new EnvLoader())->postAutoloadDump();
 
-// To avoid problems using in the CLI the typo3_console composer-package
-// the helper-functions will work in any other request-type except the CLI itself.
 if (!function_exists('ll')) {
     /**
      * Localization helper. Usage can be anywhere after the core extension has been loaded.
@@ -20,7 +21,7 @@ if (!function_exists('ll')) {
      *
      * @return string
      */
-    function ll(string $extKey, string $locallangLabel)
+    function ll(string $extKey, string $locallangLabel): string
     {
         /** @var LocalizationService */
         $localizationService = GeneralUtility::makeInstance(LocalizationService::class);
@@ -30,5 +31,26 @@ if (!function_exists('ll')) {
         }
 
         ExceptionUtility::throw('LocalizationService: The "'.$extKey.'" has not been registered yet thus can\'t access the locallized key for "'.$locallangLabel.'".');
+    }
+}
+
+if (!function_exists('env')) {
+    /**
+     * Dotenv helper. Usage can be anywhere after the core extension has been loaded.
+     * Reads a value by the .env-file from your web-server's root directory.
+     *
+     * @param string $key
+     *
+     * @return string
+     */
+    function env(string $key): string
+    {
+        $value = getenv($key);
+
+        if (!$value) {
+            $value = $_ENV[$key];
+        }
+
+        return $value;
     }
 }
