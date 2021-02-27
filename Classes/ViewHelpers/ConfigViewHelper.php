@@ -29,7 +29,7 @@ class ConfigViewHelper extends AbstractViewHelper
      */
     public function render()
     {
-        $extKey = $this->arguments['extKey'] ?? getenv('FRONTEND_EXT');
+        $extKey = $this->arguments['extKey'] ?? env('FRONTEND_EXT');
 
         $keys = GeneralUtility::trimExplode('.', $this->arguments['keys']);
         $config = ConfigHelper::get($extKey);

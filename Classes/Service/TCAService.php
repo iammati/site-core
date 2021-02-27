@@ -465,7 +465,7 @@ class TCAService
         if ($applyLocallang) {
             foreach ($CTypes as $key => $CType) {
                 $identifier = 'Backend.ContentElements:' . getCeByCtype($CType, false);
-                $localizedLabel = ll(getenv('BACKEND_EXT'), $identifier)['title'] ?? $CType . ' - "' . $identifier . '"-localization is not configured';
+                $localizedLabel = ll(env('BACKEND_EXT'), $identifier)['title'] ?? $CType . ' - "' . $identifier . '"-localization is not configured';
 
                 $CTypes[$localizedLabel] = $CType;
 
@@ -580,7 +580,7 @@ class TCAService
      */
     public static function generateIconIdentifier($CType)
     {
-        $backendExt = str_replace('_', '-', getenv('BACKEND_EXT'));
+        $backendExt = str_replace('_', '-', env('BACKEND_EXT'));
 
         return $backendExt . '-' . str_replace('_', '-', $CType);
     }
@@ -593,7 +593,7 @@ class TCAService
      */
     public static function registerBackendPreviews(string $dir)
     {
-        if (true === ConfigHelper::get(getenv('BACKEND_EXT'), 'Backend.Preview.enabled')) {
+        if (true === ConfigHelper::get(env('BACKEND_EXT'), 'Backend.Preview.enabled')) {
             $CTypes = self::fetchCEs($dir, false);
 
             foreach ($CTypes as $CType) {

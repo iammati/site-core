@@ -19,8 +19,8 @@ class WizardItemsHook implements NewContentElementWizardHookInterface
 {
     public function manipulateWizardItems(&$wizardItems, &$parentObject)
     {
-        $customerProject = getenv('CUSTOMER_PROJECT');
-        $backendExt = getenv('BACKEND_EXT');
+        $customerProject = env('CUSTOMER_PROJECT');
+        $backendExt = env('BACKEND_EXT');
 
         $path = ExtensionManagementUtility::extPath($backendExt, 'Configuration/TCA/Overrides/');
         $CTypes = TCAService::fetchCEs($path, false);

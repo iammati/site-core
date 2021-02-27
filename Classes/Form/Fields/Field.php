@@ -28,8 +28,8 @@ class Field
         $pathToField = self::$configurationRootPath.$fieldIdentifier.'.php';
 
         $extKeys = [
-            getenv('CORE_EXT'),
-            getenv('BACKEND_EXT'),
+            env('CORE_EXT'),
+            env('BACKEND_EXT'),
         ];
 
         $fieldConfigFile = null;

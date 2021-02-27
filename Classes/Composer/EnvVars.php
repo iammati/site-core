@@ -11,7 +11,7 @@ class EnvVars
      *
      * @return array|void
      */
-    protected static function getEnvContent()
+    protected static function envContent()
     {
         $path = realpath($_SERVER['DOCUMENT_ROOT'] . '/../.env');
 
@@ -47,7 +47,7 @@ class EnvVars
      */
     public static function postAutoloadDump()
     {
-        $envContent = self::getEnvContent();
+        $envContent = self::envContent();
 
         if (!is_array($envContent)) {
             echo "\n> The envContent is not an array.";
@@ -66,8 +66,8 @@ class EnvVars
             }
         }
 
-        if (is_dir('./public/typo3conf/ext/' . getenv('FRONTEND_EXT') ?? '')) {
-            $envTsFilePath = './public/typo3conf/ext/' . getenv('FRONTEND_EXT') ?? '' . '/Configuration/TypoScript/Constants/environment.ts';
+        if (is_dir('./public/typo3conf/ext/' . env('FRONTEND_EXT') ?? '')) {
+            $envTsFilePath = './public/typo3conf/ext/' . env('FRONTEND_EXT') ?? '' . '/Configuration/TypoScript/Constants/environment.ts';
 
             if (file_exists($envTsFilePath)) {
                 unlink($envTsFilePath);
@@ -91,7 +91,7 @@ class EnvVars
      */
     public static function findByKey(string $key)
     {
-        $envContent = self::getEnvContent();
+        $envContent = self::envContent();
 
         if (!is_array($envContent)) {
             echo "\n> The envContent is not an array.";

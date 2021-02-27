@@ -8,7 +8,7 @@ defined('TYPO3_MODE') || die('Access denied.');
 
         $GLOBALS['TYPO3_USER_SETTINGS']['columns']['disableSaveShortcut'] = [
             'type' => 'check',
-            'label' => 'LLL:EXT:'.getenv('CORE_EXT').'/Resources/Private/Language/locallang.xml:userSettings.disableSaveShortcut',
+            'label' => 'LLL:EXT:'.env('CORE_EXT').'/Resources/Private/Language/locallang.xml:userSettings.disableSaveShortcut',
         ];
 
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToUserSettings(

@@ -45,7 +45,7 @@ if (!function_exists('env')) {
      */
     function env(string $key): string
     {
-        $value = getenv($key);
+        $value = env($key);
 
         if (!$value) {
             $value = $_ENV[$key];

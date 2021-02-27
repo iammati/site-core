@@ -163,7 +163,7 @@ class LocalizationService
      */
     public function findByKey(string $extKey, string $key)
     {
-        $backendExt = getenv('BACKEND_EXT') ?: 'BACKEND_EXT';
+        $backendExt = env('BACKEND_EXT') ?: 'BACKEND_EXT';
         $localizationType = ConfigHelper::get($backendExt, 'localizationType') ?? 'custom';
 
         $localizedStr = '';
@@ -246,7 +246,7 @@ class LocalizationService
         $context = GeneralUtility::makeInstance(Context::class);
         $id = $context->getPropertyFromAspect('language', 'id');
 
-        $envVal = getenv('LANG_' . $id);
+        $envVal = env('LANG_' . $id);
 
         if ($envVal === false) {
             ExceptionUtility::throw('The env "LANG_' . $id . '" has not been configured properly!');

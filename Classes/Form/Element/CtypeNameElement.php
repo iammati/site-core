@@ -28,13 +28,13 @@ class CtypeNameElement extends AbstractFormElement
         $envContext = Environment::getContext();
 
         $identifier = 'Backend.ContentElements:'.getCeByCtype($CType, false);
-        $label = ll(getenv('BACKEND_EXT'), $identifier)['title'] ?? $identifier;
+        $label = ll(env('BACKEND_EXT'), $identifier)['title'] ?? $identifier;
 
         $iconIdentifier = TCAService::generateIconIdentifier($CType);
 
         $result['html'] = StandaloneViewUtility::render(
             [
-                'Templates' => 'EXT:'.getenv('CORE_EXT').'/Resources/Private/Backend/',
+                'Templates' => 'EXT:'.env('CORE_EXT').'/Resources/Private/Backend/',
             ],
             'Form/Element/CtypeName',
             [

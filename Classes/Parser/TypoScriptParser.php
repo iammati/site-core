@@ -13,7 +13,7 @@ class TypoScriptParser
     {
         $functionArgument = $params['functionArgument'];
 
-        $backendExt = getenv('BACKEND_EXT');
+        $backendExt = env('BACKEND_EXT');
 
         return ll($backendExt, $functionArgument, $this->getLanguageService());
     }
