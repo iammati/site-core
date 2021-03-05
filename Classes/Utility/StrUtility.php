@@ -107,4 +107,26 @@ class StrUtility
 
         return $haystack;
     }
+
+    /**
+     * Converts a string e.g. 'ThisIsMyString' to 'this_is_my_string' - CamelCase to snake_case.
+     *
+     * @param string $str
+     * @param string $glue
+     *
+     * @return void
+     */
+    public static function toSnakeCase($str, $glue = '_') {
+        $snakeCaseStr =  preg_replace_callback(
+            '/[A-Z]/',
+            fn($matches) => $glue . strtolower($matches[0]),
+            $str
+        );
+
+        if (self::startsWith($snakeCaseStr, '_')) {
+            return substr($snakeCaseStr, 1, strlen($snakeCaseStr));
+        }
+
+        return $snakeCaseStr;
+    }
 }

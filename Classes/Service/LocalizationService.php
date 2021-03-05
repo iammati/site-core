@@ -9,6 +9,7 @@ use Site\Core\Utility\ExceptionUtility;
 use Site\Core\Utility\StrUtility;
 use Symfony\Component\Finder\Finder;
 use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -164,12 +165,12 @@ class LocalizationService
     public function findByKey(string $extKey, string $key)
     {
         $backendExt = env('BACKEND_EXT') ?: 'BACKEND_EXT';
-        $localizationType = ConfigHelper::get($backendExt, 'localizationType') ?? 'custom';
+        $localizationType = strtolower(ConfigHelper::get($backendExt, 'localizationType') ?? 'custom');
 
         $localizedStr = '';
 
         switch ($localizationType) {
-            case 'XLIFF':
+            case 'xliff':
                 $key = str_replace('.', '/', $key);
                 $key = str_replace(':', '.xlf:', $key);
                 $input = 'LLL:EXT:' . $extKey . '/Resources/Private/Language/' . $key;
@@ -241,18 +242,24 @@ class LocalizationService
         return $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['LOCALIZATION_SERVICE'];
     }
 
+    protected function getBEUser()
+    {
+        if ($GLOBALS['BE_USER'] === null) {
+            Bootstrap::initializeBackendUser();
+        }
+
+        return $GLOBALS['BE_USER'];
+    }
+
     protected function getLanguage()
     {
         $context = GeneralUtility::makeInstance(Context::class);
         $id = $context->getPropertyFromAspect('language', 'id');
 
-        $envVal = env('LANG_' . $id);
+        $uc = unserialize($this->getBEUser()->user['uc']);
+        $lang = $uc['lang'] ?: 'en';
 
-        if ($envVal === false) {
-            ExceptionUtility::throw('The env "LANG_' . $id . '" has not been configured properly!');
-        }
-
-        return $envVal;
+        return $lang;
     }
 
     /**
@@ -260,6 +267,6 @@ class LocalizationService
      */
     protected function getLanguageService(): LanguageService
     {
-        return $GLOBALS['LANG'];
+        return $GLOBALS['LANG'] ?? GeneralUtility::makeInstance(LanguageService::class);
     }
 }

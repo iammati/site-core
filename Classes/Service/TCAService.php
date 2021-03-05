@@ -465,10 +465,13 @@ class TCAService
         if ($applyLocallang) {
             foreach ($CTypes as $key => $CType) {
                 $identifier = 'Backend.ContentElements:' . getCeByCtype($CType, false);
-                $localizedLabel = ll(env('BACKEND_EXT'), $identifier)['title'] ?? $CType . ' - "' . $identifier . '"-localization is not configured';
+
+                $localizedLabel = ll(
+                    env('BACKEND_EXT'),
+                    $identifier
+                )['title'] ?? $CType . ' - "' . $identifier . '"-localization is not configured';
 
                 $CTypes[$localizedLabel] = $CType;
-
                 unset($CTypes[$key]);
             }
         }

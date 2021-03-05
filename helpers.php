@@ -19,9 +19,9 @@ if (!function_exists('ll')) {
      *
      * @throws ExceptionUtility
      *
-     * @return string
+     * @return mixed
      */
-    function ll(string $extKey, string $locallangLabel): string
+    function ll(string $extKey, string $locallangLabel)
     {
         /** @var LocalizationService */
         $localizationService = GeneralUtility::makeInstance(LocalizationService::class);
