@@ -6,6 +6,7 @@ namespace Site\Core\Service;
 
 use Site\Core\Helper\ConfigHelper;
 use Site\Core\Utility\ExceptionUtility;
+use Site\Core\Utility\FileUtility;
 use Site\Core\Utility\FlashUtility;
 use Site\Core\Utility\StrUtility;
 use Site\SiteBackend\Preview\ContentPreviewRenderer;
@@ -490,6 +491,10 @@ class TCAService
     {
         $CTypes = self::fetchCEs($dir);
         TCAService::addSelectItems($itemGroupIdentifier, $CTypes);
+
+        foreach ($CTypes as $label => $CType) {
+            $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['TCA_SERVICE']['loadedCEs'][$CType] = true;
+        }
     }
 
     /**
@@ -550,8 +555,7 @@ class TCAService
             $replacer .= '_';
         }
 
-        $finder = new Finder();
-        $finder->files()->in($path)->name($replacer . '*.php');
+        $finder = FileUtility::retrieveFilesByPath($path)->name($replacer . '*.php');
 
         foreach ($finder as $file) {
             $fileNameWithExtension = $file->getRelativePathname();
@@ -571,6 +575,8 @@ class TCAService
                     'foreign_table' => $origFileName,
                 ]),
             ]);
+
+            $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['TCA_SERVICE']['loadedIRREs'][$origFileName] = true;
         }
     }
 

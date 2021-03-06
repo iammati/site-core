@@ -11,8 +11,10 @@ defined('TYPO3_MODE') || die('Access denied.');
     // Defining TCA_SERVICE into $GLOBALS TYPO3_CONF_VARS
     if (!isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['TCA_SERVICE'])) {
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['TCA_SERVICE'] = [
-            'fileExtensions' => [
-            ],
+            'loadedIRREs' => [],
+            'loadedCEs' => [],
+
+            'fileExtensions' => [],
         ];
     }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Site\Core\Utility;
 
+use Symfony\Component\Finder\Finder;
 use TYPO3\CMS\Core\Resource\FileRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -22,10 +23,17 @@ class FileUtility
     public static function findFilesBy($uid, $tableName, $fieldName, $fileRepo = null)
     {
         if (is_null($fileRepo)) {
-            // $fileRepo = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
             $fileRepo = GeneralUtility::makeInstance(FileRepository::class);
         }
 
         return $fileRepo->findByRelation($tableName, $fieldName, $uid);
+    }
+
+    public static function retrieveFilesByPath(string $path)
+    {
+        $finder = new Finder();
+        $finder->files()->in($path);
+
+        return $finder;
     }
 }

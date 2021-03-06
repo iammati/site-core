@@ -254,7 +254,6 @@ class LocalizationService
     protected function getLanguage()
     {
         $context = GeneralUtility::makeInstance(Context::class);
-        $id = $context->getPropertyFromAspect('language', 'id');
 
         $uc = unserialize($this->getBEUser()->user['uc']);
         $lang = $uc['lang'] ?: 'en';
