@@ -158,11 +158,15 @@ class LocalizationService
      * This is the actual logic which finds a locallized / translated string
      * by the given $extKey-string as the targeted $key-string.
      *
+     * @param string $extKey
+     * @param string $key
+     * @param string $twoLetterIsoCode
+     * 
      * @return string|void
      *
      * @throws ExceptionUtility
      */
-    public function findByKey(string $extKey, string $key)
+    public function findByKey(string $extKey, string $key, string $twoLetterIsoCode = '')
     {
         $backendExt = env('BACKEND_EXT') ?: 'BACKEND_EXT';
         $localizationType = strtolower(ConfigHelper::get($backendExt, 'localizationType') ?? 'custom');
@@ -178,7 +182,7 @@ class LocalizationService
                 break;
 
             case 'custom':
-                $language = $this->getLanguage();
+                $language = $twoLetterIsoCode ?: $this->getLanguage();
 
                 if (!isset($this->getLocalizationService()[$extKey])) {
                     $localizedStr = 'EXT:'.$extKey.' has not been configured yet for the LocalizationService!';
@@ -253,10 +257,12 @@ class LocalizationService
 
     protected function getLanguage()
     {
-        $context = GeneralUtility::makeInstance(Context::class);
+        $lang = 'en';
 
-        $uc = unserialize($this->getBEUser()->user['uc']);
-        $lang = $uc['lang'] ?: 'en';
+        if (TYPO3_MODE === 'BE') {
+            $uc = unserialize($this->getBEUser()->user['uc']);
+            $lang = $uc['lang'] ?: 'en';
+        }
 
         return $lang;
     }
