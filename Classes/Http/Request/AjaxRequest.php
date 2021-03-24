@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Site\Core\Abstracts;
+namespace Site\Core\Http\Request;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -13,12 +13,9 @@ use TYPO3\CMS\Fluid\View\TemplateView;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
- * AbstractAjax class to use in order to handle Server-Requests
- * properly and prepare a set of predefined methods + view.
- *
  * @author Mati <mati_01@icloud.com>
  */
-abstract class AbstractAjax
+class AjaxRequest
 {
     /**
      * @var TemplateView
