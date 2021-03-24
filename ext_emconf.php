@@ -3,7 +3,7 @@
 $EM_CONF[$_EXTKEY] = [
     'title' => 'Core',
     'description' => 'Core-related management here. Whether frontend or backend, Event or Middleware registration, RTE manipulation or anything else.',
-    'version' => '1.3.0',
+    'version' => '1.4.0',
     'category' => 'plugin',
     'author' => 'Mati',
     'author_email' => 'mati_01@icloud.com',
@@ -17,7 +17,7 @@ $EM_CONF[$_EXTKEY] = [
         'suggests' => [],
 
         'depends' => [
-            'typo3' => '10.4.0-10.4.99',
+            'typo3' => '10.4.14-10.4.99',
         ],
     ],
 ];

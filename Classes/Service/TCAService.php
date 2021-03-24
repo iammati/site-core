@@ -197,10 +197,10 @@ class TCAService
     /**
      * Adds the content elements (inside BE as CType) to the select dropdown.
      *
-     * @param string $itemGroupIdentifier Default is 'CustomElements'. The identifier of the itemGroup to add the select-items.
+     * @param string $itemGroupIdentifier Default is 'customelements'. The identifier of the itemGroup to add the select-items.
      * @param array  $CTypes              E.g. ['Header Teaser Image' => ce_headerteaserimage].
      */
-    public static function addSelectItems(string $itemGroupIdentifier = 'CustomElements', array $CTypes)
+    public static function addSelectItems(string $itemGroupIdentifier = 'customelements', array $CTypes)
     {
         foreach ($CTypes as $key => $CType) {
             ExtensionManagementUtility::addTcaSelectItem(
@@ -498,7 +498,7 @@ class TCAService
      *
      * @param string $dir The current __DIR__ passed
      */
-    public static function loadCEs(string $dir, string $itemGroupIdentifier = 'CustomElements')
+    public static function loadCEs(string $dir, string $itemGroupIdentifier = 'customelements')
     {
         $CTypes = self::fetchCEs($dir);
         TCAService::addSelectItems($itemGroupIdentifier, $CTypes);
@@ -566,6 +566,8 @@ class TCAService
             $replacer .= '_';
         }
 
+        $irrePrefix = ConfigHelper::get(env('BACKEND_EXT'), 'IRREs.itemPrefix') ?? 'irre_';
+
         $finder = FileUtility::retrieveFilesByPath($path)->name($replacer . '*.php');
 
         foreach ($finder as $file) {
@@ -575,7 +577,7 @@ class TCAService
             $origFileName = $fileName;
 
             $fileName = str_replace('domain_model_', '', $fileName);
-            $fileName = str_replace($replacer, 'irre_', $fileName);
+            $fileName = str_replace($replacer, $irrePrefix, $fileName);
 
             $fileName .= '_item';
 

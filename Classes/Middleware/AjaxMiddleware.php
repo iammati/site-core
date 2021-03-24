@@ -12,6 +12,7 @@ use Site\Core\Service\AjaxService;
 use Site\Core\Utility\StrUtility;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Fluid\View\TemplateView;
 
 /**
  * This Middleware takes care of any incoming AJAX-requests - whether GET or POST,
