@@ -14,6 +14,8 @@ class FieldUtility
         $field = array_merge($baseConfig, $config);
         $field['config'] = array_merge_recursive($field['config'], $fieldConfig['config'] ?? $fieldConfig);
 
+        $field['description'] = $fieldConfig['description'] ?: '';
+
         return $field;
     }
 }

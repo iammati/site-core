@@ -424,16 +424,12 @@ class TCAService
         $fieldNames = [];
 
         foreach ($fieldConfigurations as $fieldName => $config) {
-            $type = $config[0];
-            $label = $config[1] ?? $type;
-            $additionalConfig = $config[2] ?? [];
-
-            $GLOBALS['SiteConfiguration']['site']['columns'][$fieldName] = self::findConfigByType($type, $fieldName, $label, $additionalConfig);
+            $GLOBALS['SiteConfiguration']['site']['columns'][$fieldName] = $config;
 
             $fieldNames[] = $fieldName;
         }
 
-        $GLOBALS['SiteConfiguration']['site']['types']['0']['showitem'] .= ',\n                --div--;' . $tabName . ', ' . implode(',', $fieldNames);
+        $GLOBALS['SiteConfiguration']['site']['types']['0']['showitem'] .= ',' . "\n" . '                --div--;' . $tabName . ', ' . implode(',', $fieldNames);
     }
 
     /**
@@ -618,11 +614,15 @@ class TCAService
         if (true === ConfigHelper::get(env('BACKEND_EXT'), 'Backend.Preview.enabled')) {
             $CTypes = self::fetchCEs($dir, false);
 
-            foreach ($CTypes as $CType) {
-                $GLOBALS['TCA']['tt_content']['types'][$CType]['previewRenderer'] = Site\SiteBackend\Preview\ContentPreviewRenderer::class;
-            }
+            $renderer = ConfigHelper::get(env('BACKEND_EXT'), 'Backend.Preview.renderer');
 
-            $GLOBALS['TCA']['tt_content']['ctrl']['previewRenderer'] = ContentPreviewRenderer::class;
+            if ($renderer) {
+                foreach ($CTypes as $CType) {
+                    $GLOBALS['TCA']['tt_content']['types'][$CType]['previewRenderer'] = $renderer;
+                }
+
+                $GLOBALS['TCA']['tt_content']['ctrl']['previewRenderer'] = $renderer;
+            }
         }
     }
 }
