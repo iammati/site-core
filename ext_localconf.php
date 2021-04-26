@@ -1,7 +1,5 @@
 <?php
 
-defined('TYPO3_MODE') || die('Access denied.');
-
 (function () {
     // Defining AJAX into $GLOBALS TYPO3_CONF_VARS
     if (!isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['AJAX'])) {

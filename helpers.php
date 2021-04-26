@@ -57,7 +57,7 @@ if (!function_exists('env')) {
     }
 }
 
-if (!function_exists('getRequest')) {
+if (!function_exists('request')) {
     /**
      * Helper to easier get the current HTTP server request.
      *

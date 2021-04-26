@@ -250,8 +250,6 @@ So in our case `irre_accordions_item`. To display that one in the backend now, w
 ```
 <?php
 
-defined('TYPO3_MODE') || die('Access denied.');
-
 use Site\Core\Service\TCAService;
 
 TCAService::showFields(basename(__FILE__, '.php'), '
@@ -270,8 +268,6 @@ Basically it's the same one from the `$GLOBALS` - just with a cleaner `API` call
 
 ```
 <?php
-
-defined('TYPO3_MODE') || die('Access denied.');
 
 use Site\Core\Service\TCAService;
 

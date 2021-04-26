@@ -76,13 +76,14 @@ class RecordHelper
      * @param string $tableName The table name for the where-condition
      * @param string $fieldName The column name for the where-condition
      * @param mixed  $value     The value used for $fieldName
+     * @param string $select    Comma-List of columns / fields
      */
-    public static function findPrecise(string $tableName, string $fieldName, $value): QueryBuilder
+    public static function findPrecise(string $tableName, string $fieldName, $value, string $select = '*'): QueryBuilder
     {
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($tableName);
 
         return $queryBuilder
-            ->select('*')
+            ->select($select)
             ->from($tableName)
             ->where($queryBuilder->expr()->eq($fieldName, $value))
         ;
