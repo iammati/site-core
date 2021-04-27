@@ -117,9 +117,11 @@ class StrUtility
      * @return void
      */
     public static function toSnakeCase($str, $glue = '_') {
-        $snakeCaseStr =  preg_replace_callback(
+        $snakeCaseStr = preg_replace_callback(
             '/[A-Z]/',
-            fn($matches) => $glue . strtolower($matches[0]),
+            function($matches) use($glue) {
+                return $glue . strtolower($matches[0]);
+            },
             $str
         );
 
