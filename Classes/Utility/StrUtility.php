@@ -89,7 +89,7 @@ class StrUtility
         $haystack = preg_replace('/[^a-z0-9]/u', $separator, $haystack);
 
         if ($separator != '') {
-            $haystack = preg_replace('/[$separator]+/u', $separator, $haystack);
+            // $haystack = preg_replace('/[$separator]+/u', $separator, $haystack);
         }
 
         // If requested URI starts with a '/' (slash),
