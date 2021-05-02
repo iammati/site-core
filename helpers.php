@@ -57,19 +57,24 @@ if (!function_exists('env')) {
     }
 }
 
-if (!function_exists('request')) {
+if (!function_exists('serverRequest')) {
     /**
      * Helper to easier get the current HTTP server request.
      *
      * @return ServerRequest
      */
-    function request(): ServerRequest
+    function serverRequest(): ServerRequest
     {
         return $GLOBALS['TYPO3_REQUEST'] ?? GeneralUtility::makeInstance(ServerRequest::class);
     }
 }
 
 if (!function_exists('frontend')) {
+    /**
+     * Helper to easier get the current frontend instance by TYPO3.
+     *
+     * @return TypoScriptFrontendController
+     */
     function frontend()
     {
         return $GLOBALS['TSFE'];
