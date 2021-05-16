@@ -1,9 +1,9 @@
 <?php
 
 $EM_CONF[$_EXTKEY] = [
-    'title' => 'Core',
+    'title' => 'Site-Core',
     'description' => 'Core-related management here. Whether frontend or backend, Event or Middleware registration, RTE manipulation or anything else.',
-    'version' => '1.6.1',
+    'version' => '1.7.2',
     'category' => 'plugin',
     'author' => 'Mati',
     'author_email' => 'mati_01@icloud.com',
@@ -14,11 +14,14 @@ $EM_CONF[$_EXTKEY] = [
 
     'constraints' => [
         'conflicts' => [],
-        'suggests' => [],
+
+        'suggests' => [
+            'container' => '*',
+        ],
 
         'depends' => [
-            'typo3' => '10.4.15-10.4.99',
-            'container' => '1.3.0',
+            'typo3' => '10.4.16-10.4.99',
+            'container' => '*',
         ],
     ],
 ];

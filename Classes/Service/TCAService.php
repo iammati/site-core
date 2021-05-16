@@ -142,7 +142,6 @@ class TCAService
                 $config['ctrl']['searchFields'] = $nitems;
 
                 // Show items
-                $config['interface']['showRecordFieldList'] = str_replace('{SHOW_ITEMS}', $nitems, $config['interface']['showRecordFieldList']);
                 $config['types']['1']['showitem'] = str_replace('{SHOW_ITEMS}', $nitems, $config['types']['1']['showitem']);
 
                 // Tab name

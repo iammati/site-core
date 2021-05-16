@@ -19,9 +19,9 @@ if (!function_exists('ll')) {
      * @param string $locallangLabel   The label to be locallized
      * @param string $twoLetterIsoCode The twoLetterIsoCode e.g. 'de' or 'en'
      *
-     * @throws ExceptionUtility
-     *
      * @return mixed
+     *
+     * @throws Exception
      */
     function ll(string $extKey, string $locallangLabel, string $langCode = '')
     {
@@ -43,7 +43,7 @@ if (!function_exists('env')) {
      *
      * @param string $key
      *
-     * @return string|null
+     * @return null|string
      */
     function env(string $key)
     {
@@ -65,7 +65,7 @@ if (!function_exists('serverRequest')) {
      */
     function serverRequest(): ServerRequest
     {
-        return $GLOBALS['TYPO3_REQUEST'] ?? GeneralUtility::makeInstance(ServerRequest::class);
+        return $GLOBALS['TYPO3_REQUEST'] ?: GeneralUtility::makeInstance(ServerRequest::class);
     }
 }
 
@@ -78,5 +78,30 @@ if (!function_exists('frontend')) {
     function frontend()
     {
         return $GLOBALS['TSFE'];
+    }
+}
+
+if (!function_exists('ed')) {
+    /**
+     * @param mixed $args
+     * 
+     * @return string
+     */
+    function ed(...$args)
+    {
+        DebuggerUtility::var_dump(...$args);
+    }
+}
+
+if (!function_exists('edd')) {
+    /**
+     * @param mixed $args
+     * 
+     * @return string
+     */
+    function edd(...$args)
+    {
+        ed($args);
+        die;
     }
 }

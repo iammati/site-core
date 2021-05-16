@@ -260,7 +260,7 @@ class LocalizationService
         $lang = 'en';
 
         if (TYPO3_MODE === 'BE') {
-            $uc = unserialize($this->getBEUser()->user['uc']);
+            $uc = unserialize($this->getBEUser()->user['uc'] ?? '');
             $lang = $uc['lang'] ?: 'en';
         }
 
