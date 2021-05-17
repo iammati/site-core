@@ -6,6 +6,7 @@ namespace Site\Core\Utility;
 
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class IRREUtility
@@ -50,6 +51,10 @@ class IRREUtility
     public static function resolveByRepository($parentid, $tableName, $fieldName = 'parentid', $repository)
     {
         $pid = $GLOBALS['TSFE']->id;
+
+        if (ApplicationType::fromRequest(serverRequest())->isBackend()) {
+            $pid = serverRequest()->getQueryParams()['id'];
+        }
 
         $context = GeneralUtility::makeInstance(Context::class);
         $languageId = $context->getPropertyFromAspect('language', 'id');

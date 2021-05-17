@@ -1,7 +1,5 @@
 <?php
 
-use Site\Core\Service\ExtconfService;
-
 (function () {
     // Defining AJAX into $GLOBALS TYPO3_CONF_VARS
     if (!isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['AJAX'])) {

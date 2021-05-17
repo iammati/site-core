@@ -141,11 +141,11 @@ class TCAService
                 $config['ctrl']['searchFields'] = $nitems;
 
                 // Show items
-                $config['types']['1']['showitem'] = str_replace('{SHOW_ITEMS}', $nitems, $config['types']['1']['showitem']);
+                $config['types']['showitem'] = str_replace('{SHOW_ITEMS}', $nitems, $config['types']['showitem']);
 
                 // Tab name
                 $tabName = $additionalConfig['title'] ?? 'Item';
-                $config['types']['1']['showitem'] = str_replace('{TAB_NAME}', $tabName, $config['types']['1']['showitem']);
+                $config['types']['showitem'] = str_replace('{TAB_NAME}', $tabName, $config['types']['showitem']);
 
                 foreach ($additionalConfig['columns'] as $key => $column) {
                     $config['columns'][$key] = $column;
@@ -262,7 +262,7 @@ class TCAService
         // self::$eventDispatcher = GeneralUtility::makeInstance(Container::class)->getInstance(EventDispatcherInterface::class);
         // $showitem = static::$eventDispatcher->dispatch(new AfterCeDefaultTcaRetrievedEvent($defaultShowitem))->getShowitem();
 
-        $GLOBALS['TCA']['tt_content']['types'][$CType]['showitem'] = $showitem;
+        $GLOBALS['TCA']['tt_content']['types'][$CType]['showitem'] = $defaultShowitem;
     }
 
     /**
