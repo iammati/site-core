@@ -89,7 +89,7 @@ if (!function_exists('ed')) {
      */
     function ed(...$args)
     {
-        DebuggerUtility::var_dump(...$args);
+        \TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump(...$args);
     }
 }
 

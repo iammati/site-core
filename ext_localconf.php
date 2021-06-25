@@ -47,17 +47,6 @@
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms']['db_new_content_el']['wizardItemsHook'][] = Site\Core\Hook\WizardItemsHook::class;
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tsparser.php']['preParseFunc']['ll'] = Site\Core\Parser\TypoScriptParser::class.'->ll';
 
-    // DependencyOrderingService Handler
-    // $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['someExt']['someHook'][<some id>] = [
-    //     'handler' => someClass::class,
-    //     'runBefore' => [
-    //         // 
-    //     ],
-    //     'runAfter' => [
-    //         // 
-    //     ],
-    // ];
-
     // The 'default'-cropVariant for the Image field when using site_core's TCAService
     $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['TCA_SERVICE']['cropVariants']['default'] = [
         'desktop' => [
