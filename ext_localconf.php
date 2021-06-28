@@ -40,14 +40,10 @@
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['Backend\Template\Components\ButtonBar']['getButtonsHook'][] = Site\Core\Hook\ButtonBarHook::class.'->loadRequireJsModule';
     }
 
-    if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/helpers.php')) {
-        file_put_contents(
-            $_SERVER['DOCUMENT_ROOT'] . '/helpers.php',
-            file_get_contents('https://raw.githubusercontent.com/iammati/iammati/master/helpers.php')
-        );
+    if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/helpers.php')) {
+        include $_SERVER['DOCUMENT_ROOT'] . '/helpers.php';
     }
 
-    include $_SERVER['DOCUMENT_ROOT'] . '/helpers.php';
     include \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('site_core', 'helpers.php');
 
     // Automatically registering TypoScript configuration for newContentElement wizard for null TS config by developer
