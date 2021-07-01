@@ -225,7 +225,7 @@ class LocalizationService
             default:
                 ExceptionUtility::throw(
                     sprintf(
-                        'There must be a configured localizationType to either "XLIFF" or "custom" inside EXT:%s/Config.php:localizationType value to handle whether you want to use XLIFF or EXT:%s\'s custom ll-function!',
+                        'There must be a configured localizationType to either "xliff" or "custom" inside EXT:%s/Config.php:localizationType value to handle whether you want to use XLIFF or EXT:%s\'s custom ll-function!',
                         $backendExt,
                         $backendExt
                     )

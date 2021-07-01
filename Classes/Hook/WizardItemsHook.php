@@ -27,36 +27,38 @@ class WizardItemsHook implements NewContentElementWizardHookInterface
 
         $customWizardItems = [];
 
-        foreach ($CTypes as $CType) {
-            $ctypeName = explode('_', $CType)[1];
+        if (sizeof($CTypes) !== 0) {
+            foreach ($CTypes as $CType) {
+                $ctypeName = explode('_', $CType)[1];
 
-            $identifiers = 'Backend.ContentElements:'.$ctypeName;
-            $locallizedCE = ll($backendExt, $identifiers);
+                $identifiers = 'Backend.ContentElements:'.$ctypeName;
+                $locallizedCE = ll($backendExt, $identifiers);
 
-            $elementConfiguration = [
-                'iconIdentifier' => $customerProject.'ce-'.$ctypeName,
+                $elementConfiguration = [
+                    'iconIdentifier' => $customerProject.'ce-'.$ctypeName,
 
-                'title' => $locallizedCE['title'] ?? $CType,
-                'description' => $locallizedCE['description'] ?? '',
+                    'title' => $locallizedCE['title'] ?? $CType,
+                    'description' => $locallizedCE['description'] ?? '',
 
-                'saveAndClose' => false,
+                    'saveAndClose' => false,
 
-                'tt_content_defValues' => [
-                    'CType' => $CType,
+                    'tt_content_defValues' => [
+                        'CType' => $CType,
+                    ],
+
+                    'params' => '&defVals[tt_content][CType]='.$CType,
+                ];
+
+                $customWizardItems['CustomElements_'.$CType] = $elementConfiguration;
+            }
+
+            $wizardItems = $customWizardItems + $wizardItems;
+
+            $wizardItems = [
+                'CustomElements' => [
+                    'header' => ll($backendExt, 'Backend.ContentElements:tabName'),
                 ],
-
-                'params' => '&defVals[tt_content][CType]='.$CType,
-            ];
-
-            $customWizardItems['CustomElements_'.$CType] = $elementConfiguration;
+            ] + $wizardItems;
         }
-
-        $wizardItems = $customWizardItems + $wizardItems;
-
-        $wizardItems = [
-            'CustomElements' => [
-                'header' => 'Elements',
-            ],
-        ] + $wizardItems;
     }
 }

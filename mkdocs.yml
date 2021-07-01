@@ -1,0 +1,24 @@
+site_name: Site-Core Documentation
+repo_url: https://github.com/iammati/site-core
+site_url: https://github.com/iammati/site-core
+repo_name: GitHub
+edit_uri: blob/master/docs/
+theme:
+  name: 'material'
+  palette:
+    primary: 'light-blue'
+plugins:
+  - 'search'
+nav:
+  - 'Home': 'index.md'
+
+  - 'Services':
+    - 'Tca-Service': 'services/tca-service.md'
+    # - 'Model-Service': 'services/model.md'
+
+  - 'Frontend-Rendering':
+    - 'CTypes': 'rendering/ctypes.md'
+extra_javascript:
+  - 'assets/src/JavaScript/OpenNav.js'
+extra_css:
+  - 'assets/src/Css/Typography.css'

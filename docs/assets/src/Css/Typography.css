@@ -1,0 +1,25 @@
+.note {
+    border-left: 5px solid #d5d5d5;
+    padding-left: .5rem;
+    display: block;
+    font-style: italic;
+    font-size: 90%;
+}
+
+h4 {
+    margin-top: 2rem !important;
+}
+
+.img-fluid {
+    height: auto;
+    max-width: 100%;
+    display: block;
+}
+
+figure img {
+    box-shadow: 0 0 0 0 rgb(0 0 0 / 20%), 0 6px 5px 0 rgb(0 0 0 / 19%);
+}
+
+figure figcaption {
+    margin: .75em auto 1.25em !important;
+}
