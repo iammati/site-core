@@ -8,9 +8,7 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 class ModelService
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $templatePath = 'Classes/Service/ModelTemplate.php';
 
     /**
@@ -19,9 +17,7 @@ class ModelService
      * @param string $extKey     Key of your extension where the given Model should be created
      * @param string $namespace  Namespace of the model
      * @param string $modelName  Classname of the model
-     * @param array  $properties Model properties e.g: $properties = ['string' => ['name' => '''']]
-     *
-     * @return void
+     * @param array  $properties Model properties e.g: $properties = ['string' => ['header' => '''']]
      */
     public static function generate(string $extKey, string $namespace, string $modelName, array $properties)
     {
@@ -39,7 +35,7 @@ class ModelService
             return $flashUtility->message('Core (EXT:'.env('CORE_EXT').') - Model Service', 'There\'s no such folder: $domainFolder AND/OR $modelFolder', 1);
         }
 
-        $modelPath = ExtensionManagementUtility::extPath($extKey).'Classes/Domain/Model/$modelName.php';
+        $modelPath = ExtensionManagementUtility::extPath($extKey).'Classes/Domain/Model/'.$modelName.'.php';
 
         $newModelFile = fopen($modelPath, 'w')
             or
@@ -65,36 +61,27 @@ class ModelService
                 $type = self::updateType($varType);
                 $return = self::findReturnByType($type);
 
-                $dataContent .= '
-    /**
-     * $property
-     * 
-     * @var $type
-     */
-    protected $'.$property.' = '.$value.';
+                $dataContent .= "
+    /** @var $type */
+    protected $".$property." = ".$value.";
 
-    /**
-     * Sets the $property
-     * 
-     * @param $varType $$property
-     * @return $return
-     */
-    public function set'.ucfirst($property).'($$property)
+    /** @param $varType $$property */
+    public function set".ucfirst($property)."(\$$property)
     {
-        '.'$this->'.$property.' = $$property;
+        \$this->$property = $$property;
     }
 
-    /**
-     * Returns the $property
-     * 
-     * @return $varType $$property
-     */
-    public function get'.ucfirst($property).'()
+    /** @return $varType $$property */
+    public function get".ucfirst($property)."()
     {
-        return '.'$this'.'->$property;
+        return \$this->$property;
     }
-    ';
+    ";
             }
+        }
+
+        if ($modelName == 'Ttcontent') {
+            $content = str_replace('\TYPO3\CMS\Extbase\DomainObject\AbstractEntity', '\Site\SiteBackend\Domain\Model\BaseTtcontent', $content);
         }
 
         $dataContent = str_replace('$ ', '', $dataContent);
