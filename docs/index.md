@@ -1,6 +1,6 @@
 # Intro to Site-Core
 
-<a href="https://github.com/iammati/site-core" target="_blank">Site-Core</a> is an open source extension for TYPO3 which has been designed to make it easier for developers creating new Content-Elements using the Tca-Service or
+<a href="https://github.com/iammati/site-core" target="_blank">site-core</a> is an open source extension for TYPO3 which has been designed to make it easier for developers creating new Content-Elements using the Tca-Service or
 kick-off new projects easier since standard methods are already implemented and shipped within site-core.
 
 ## System Requirements
@@ -22,7 +22,7 @@ ddev composer req site/site-core
 
 ### Getting started
 
-Since 1.8 of the site-core extension it's required for subpackages as (currently only) Site-Ception to maintain a `helpers.php` file inside the `DOCUMENT_ROOT` path of your webserver.
+Since 1.8 of the site-core extension it's required for subpackages as (currently only) <a href="https://github.com/iammati/site-ception" target="_blank">site-ception</a> to maintain a `helpers.php` file inside the `DOCUMENT_ROOT` path of your webserver.
 
 <a href="https://github.com/iammati/site-ception/#readme">Read this</a> for more information about the `helpers.php` file.
 

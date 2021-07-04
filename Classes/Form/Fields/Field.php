@@ -10,20 +10,13 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 class Field
 {
-    /**
-     * @var string
-     */
-    protected static $configurationRootPath = '/Configuration/Fields/';
+    protected static string $configurationRootPath = '/Configuration/Fields/';
 
     /**
-     * Creation of field which handles the entire field-array.
-     *
-     * @param string $fieldIdentifier The identifier of the field e.g. 'Input'.
-     * @param array  $config          A TCA field configuration-array.
-     *
-     * @return array
+     * @param string $fieldIdentifier The identifier of a field e.g. 'Input'.
+     * @param array  $config          A TCA field-configuration.
      */
-    public static function create(string $fieldIdentifier, array $config)
+    public static function create(string $fieldIdentifier, array $config): array
     {
         $pathToField = self::$configurationRootPath.$fieldIdentifier.'.php';
 

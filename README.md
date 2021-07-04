@@ -208,9 +208,9 @@ one would do via the TCA-Service the following approach:
 ```
 use Site\Core\Form\Fields\Input;
 use Site\Core\Form\Fields\RTE;
-use Site\Core\Service\TCAService;
+use Site\Core\Service\TcaService;
 
-return TCAService::findConfigByType('Inline', basename(__FILE__, '.php'), '', [
+return TcaService::findConfigByType('Inline', basename(__FILE__, '.php'), '', [
     // Text of an IRRE as a preview of the Inline-Record item / accordion in the BE
     'label' => 'rte',
 
@@ -235,24 +235,24 @@ You may want to look at https://packagist.org/packages/site/site-backend which h
 Yes. This is the best name you could imagine, and the best thing is: it does what it says!
 
 
-You can use `TCAService::registerIRREs(__DIR__.'/..', 'tx_typo3skeleton_domain_model_');` in your `EXT:myext/Configuration/TCA/Overrides/tt_content.php` for your custom configured TCA table-files which are placed in `EXT:myext/Configuration/TCA/<table>.php` to register automatically the '`irre_{suffix}_item`'-field to use them inside `EXT:myext/Configuration/TCA/Overrides/ce_{suffix}.php`.
+You can use `TcaService::registerIRREs(__DIR__.'/..', 'tx_typo3skeleton_domain_model_');` in your `EXT:myext/Configuration/TCA/Overrides/tt_content.php` for your custom configured TCA table-files which are placed in `EXT:myext/Configuration/TCA/<table>.php` to register automatically the '`irre_{suffix}_item`'-field to use them inside `EXT:myext/Configuration/TCA/Overrides/ce_{suffix}.php`.
 
 *That sounds very complicated!*
 So, let's use a real use-case example.
 We configured in the upper-part of the TCA-Service the table/ctrl TCA configuration for our accordion. To create now inline records of an accordion we have to make a new TCA field with the type `inline` (https://docs.typo3.org/m/typo3/reference-tca/master/en-us/ColumnsConfig/Type/Inline.html).
 
-Those are, when calling the `TCAService::registerIRREs`-method automatically registered. It'll iterate through `EXT:myext/Configuration/TCA/<table>.php` files and replaces using the 2nd parameter (which we passed above as `tx_typo3skeleton_domain_model_`) with nothing (an empty string).
+Those are, when calling the `TcaService::registerIRREs`-method automatically registered. It'll iterate through `EXT:myext/Configuration/TCA/<table>.php` files and replaces using the 2nd parameter (which we passed above as `tx_typo3skeleton_domain_model_`) with nothing (an empty string).
 What left is 'accordions.php' (from `EXT:myext/Configuration/TCA/tx_typo3skeleton_domain_model_accordions.php`). The `.php` will also be removed. So at the end we got `accordions` now.
 
-That's called the suffix now. TCAService registers then new fields called with the prefix `'irre_' + suffix + '_item'`.
+That's called the suffix now. TcaService registers then new fields called with the prefix `'irre_' + suffix + '_item'`.
 So in our case `irre_accordions_item`. To display that one in the backend now, we would have to make a `EXT:myext/Configuration/TCA/Overrides/ce_accordions.php` where we put the following code:
 
 ```
 <?php
 
-use Site\Core\Service\TCAService;
+use Site\Core\Service\TcaService;
 
-TCAService::showFields(basename(__FILE__, '.php'), '
+TcaService::showFields(basename(__FILE__, '.php'), '
     irre_accordions_item,
 ');
 ```
@@ -261,7 +261,7 @@ All left is the SQL to create the table normally as you would do usually and a T
 
 ---
 
-We come to two other handy functions of TCAService called `showFields` as we just did above and `columnsOverridesField`.
+We come to two other handy functions of TcaService called `showFields` as we just did above and `columnsOverridesField`.
 
 We have an use-case example for showFields already so we only need to know what columnsOverridesField does.
 Basically it's the same one from the `$GLOBALS` - just with a cleaner `API` call rather than writing that ugly `$GLOBALS` always before.
@@ -269,13 +269,13 @@ Basically it's the same one from the `$GLOBALS` - just with a cleaner `API` call
 ```
 <?php
 
-use Site\Core\Service\TCAService;
+use Site\Core\Service\TcaService;
 
-TCAService::showFields(basename(__FILE__, '.php'), '
+TcaService::showFields(basename(__FILE__, '.php'), '
     ce_rte,
 ');
 
-TCAService::columnsOverridesField(basename(__FILE__, '.php'), [
+TcaService::columnsOverridesField(basename(__FILE__, '.php'), [
     'ce_rte' => [
         'config' => [
             'default' => 'Some default text for the RTE',
@@ -288,7 +288,7 @@ The method itself just put itself into the columnsOverrides into the `$GLOBALS` 
 
 You also noticed we never hardcoded the filename, that's because if we want to change a filename because we either don't like it or have to rename it for whatever reason, `basename(__FILE__, '.php')` retrieves the current php-script filename and removes the '.php'-suffix at the end.
 
-The `TCAService::loadCEs(__DIR__);` can and should be called only in `EXT:myext/Configuration/TCA/Overrides/tt_content.php`.
+The `TcaService::loadCEs(__DIR__);` can and should be called only in `EXT:myext/Configuration/TCA/Overrides/tt_content.php`.
 This method automatically adds the configured `EXT:myext/Configuration/TCA/Overrides/ce_*.php`-files into TYPO3's select items for content-elements.
 
 Also there's a hook which registers automatically the content-elements into the newContentElement-Wizard of TYPO3 to skip the "Page-TSconfig"-configuration. Laziness = Time-saver! :D

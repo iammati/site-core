@@ -1,0 +1,44 @@
+.note {
+  border-left: 5px solid #d5d5d5;
+  padding-left: 0.5rem;
+  display: block;
+  font-style: italic;
+  font-size: 90%;
+}
+
+h4 {
+  margin-top: 2rem !important;
+}
+
+.img-fluid {
+  height: auto;
+  max-width: 100%;
+  display: block;
+}
+
+figure img {
+  box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2), 0 6px 5px 0 rgba(0, 0, 0, 0.19);
+}
+
+figure figcaption {
+  margin: 0.75em auto 1.25em !important;
+}
+
+details * {
+  font-size: 0.8rem;
+}
+
+.md-content article.md-content__inner.md-typeset h1 {
+  margin-bottom: 0 !important;
+}
+.md-content article.md-content__inner.md-typeset h2 {
+  margin-top: 0 !important;
+}
+
+h1#changelog ~ h2 {
+  margin-top: 1.6em !important;
+}
+h1#changelog ~ h2 small {
+  font-style: italic;
+  font-size: 50%;
+}

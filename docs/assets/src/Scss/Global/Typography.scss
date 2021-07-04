@@ -23,3 +23,17 @@ figure img {
 figure figcaption {
     margin: .75em auto 1.25em !important;
 }
+
+details * {
+    font-size: .8rem;
+}
+
+.md-content article.md-content__inner.md-typeset {
+    h1 {
+        margin-bottom: 0 !important;
+    }
+
+    h2 {
+        margin-top: 0 !important;
+    }
+}

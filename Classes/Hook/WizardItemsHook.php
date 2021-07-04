@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Site\Core\Hook;
 
-use Site\Core\Service\TCAService;
+use Site\Core\Service\TcaService;
 use TYPO3\CMS\Backend\Wizard\NewContentElementWizardHookInterface;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 /**
  * This Hook-Listener for the WizardItems
- * adds dynamically by fetching via TCAService all Content-Elements
+ * adds dynamically by fetching via TcaService all Content-Elements
  * and adds them to the newContentElement wizard automatically.
  *
  * @author Mati <mati_01@icloud.com>
@@ -23,7 +23,7 @@ class WizardItemsHook implements NewContentElementWizardHookInterface
         $backendExt = env('BACKEND_EXT');
 
         $path = ExtensionManagementUtility::extPath($backendExt, 'Configuration/TCA/Overrides/');
-        $CTypes = TCAService::fetchCEs($path, false);
+        $CTypes = TcaService::fetchCEs($path, false);
 
         $customWizardItems = [];
 

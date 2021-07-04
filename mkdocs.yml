@@ -3,22 +3,38 @@ repo_url: https://github.com/iammati/site-core
 site_url: https://github.com/iammati/site-core
 repo_name: GitHub
 edit_uri: blob/master/docs/
+
 theme:
   name: 'material'
   palette:
     primary: 'light-blue'
+
 plugins:
   - 'search'
+
+  - exclude:
+      glob:
+        - assets/node_modules/*
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+
 nav:
   - 'Home': 'index.md'
+  - 'Changelog':
+    - 'Summary': 'changelog.md'
+    - 'v2.0.0': 'changelog/2.0.0.md'
 
   - 'Services':
     - 'Tca-Service': 'services/tca-service.md'
     # - 'Model-Service': 'services/model.md'
 
   - 'Frontend-Rendering':
-    - 'CTypes': 'rendering/ctypes.md'
+    - 'Engine': 'rendering/engine.md'
+
 extra_javascript:
-  - 'assets/src/JavaScript/OpenNav.js'
+  - 'assets/public/JavaScript/app.min.js'
+
 extra_css:
-  - 'assets/src/Css/Typography.css'
+  - 'assets/public/Css/app.min.css'

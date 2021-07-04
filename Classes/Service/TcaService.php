@@ -20,42 +20,26 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 // use TYPO3\CMS\Extbase\Object\Container\Container;
 
 /**
- * The TCAService provides useful methods and an effective way
+ * The TcaService provides useful methods and an effective way
  * of adding dynamically new tt_content AND for any other
  * table (e.g. tx_vendor_domain_model_accordion etc.) fields to have
  * it as a developer way more easier registrating those by using predefined
- * configuration files (see EXT:site_core/Configuration/TCAServiceConfigs/*.php).
+ * configuration files (see EXT:site_core/Configuration/Fields/*.php).
  *
  * It's also possible to edit what a default content element should contain.
- * Stuff like language, appearance (which is useful for custom spaces and or layouts of an CE).
+ * Stuff like language, appearance (which is useful for custom spaces and or layouts of a CE).
  * Methods to append to an existing frame is also possible such as adding a configuration for
- * the Sites-Configuration. In addition this TCAService version provides support ONLY for TYPO3 +10.4 LTS.
+ * the sites-config.
  *
  * @author Mati <mati_01@icloud.com>
  */
-class TCAService
+class TcaService
 {
-    /**
-     * @var FlashUtility
-     */
-    protected static $flashUtility;
+    protected static string $TCAServiceConfigs = __DIR__ . '/../../Configuration/Fields';
 
-    /**
-     * Path to the TCA Service Config files.
-     *
-     * @var string
-     */
-    protected static $TCAServiceConfigs = __DIR__ . '/../../Configuration/Fields';
+    protected static FlashUtility $flashUtility;
+    protected static EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var EventDispatcherInterface
-     */
-    protected static $eventDispatcher;
-
-    /**
-     * Constructor of this service.
-     * Initializes its classes.
-     */
     public function __construct()
     {
         $this->flashUtility = GeneralUtility::makeInstance(FlashUtility::class);
@@ -87,13 +71,13 @@ class TCAService
         $field = null;
 
         if (!realpath(self::$TCAServiceConfigs)) {
-            self::$flashUtility->message('TCAService - Missing Configs-Directory', 'Following directory missing: ' . self::$TCAServiceConfigs, 2);
+            self::$flashUtility->message('TcaService - Missing Configs-Directory', 'Following directory missing: ' . self::$TCAServiceConfigs, 2);
 
-            return 'TCAService Error - $TCAServiceConfigs.';
+            return 'TcaService Error - $TCAServiceConfigs.';
         }
 
         if (!$realpath) {
-            self::$flashUtility->message('TCAService - Type: "' . $type . '".php does not exists', 'Create this file in order to make it working', 3);
+            self::$flashUtility->message('TcaService - Type: "' . $type . '".php does not exists', 'Create this file in order to make it working', 3);
         } else {
             $config = include $filepath;
 
@@ -117,9 +101,9 @@ class TCAService
                 $nitems = '';
 
                 if (!isset($items)) {
-                    self::$flashUtility->message('TCAService - Type: $type.php', 'AdditionalConfig: "columns" not found!', 2);
+                    self::$flashUtility->message('TcaService - Type: $type.php', 'AdditionalConfig: "columns" not found!', 2);
 
-                    return 'TCAService Error - Inline || Model.';
+                    return 'TcaService Error - Inline || Model.';
                 }
 
                 // Looping through $items for showitems for IRRE
@@ -156,9 +140,7 @@ class TCAService
             // else overwriting it inside $config
             if ('InlineItem' == $type) {
                 if (!isset($additionalConfig['foreign_table'])) {
-                    $FlashUtility->message('TCAService - Type: $type.php', 'AdditionalConfig missing "foreign_table" value!', 2);
-
-                    return 'TCAService Error - InlineItem.';
+                    ExceptionUtility::throw('TcaService - Type: '.$type.'.php - $additionalConfig missing "foreign_table" value');
                 }
                 $config['config']['foreign_table'] = $additionalConfig['foreign_table'] ?? '';
             }
@@ -166,9 +148,7 @@ class TCAService
             // Slug field
             if ('Slug' == $type) {
                 if (!isset($additionalConfig['generatorOptions']['fields'])) {
-                    $FlashUtility->message('TCAService - Type: "' . $type . '".php', 'AdditionalConfig missing "generatorOptions[fields]" for Slug-field as value!', 2);
-
-                    return 'TCAService Error - Slug.';
+                    ExceptionUtility::throw('TcaService - Type: '.$type.'.php - $additionalConfig missing "generatorOptions[fields]" for Slug-field as value');
                 }
                 $config['config']['generatorOptions']['fields'] = $additionalConfig['generatorOptions']['fields'] ?? '';
             }
@@ -269,10 +249,10 @@ class TCAService
      * Adds an additional field for IRRE content-elements.
      * Everything else is the same as the above showFields-method.
      *
-     * @method \Site\SiteBackend\Service\TCAService::showFields()
+     * @method \Site\SiteBackend\Service\TcaService::showFields()
      *
      * @param string $CType  E.g. ce_headerteaserimage or ce_slider
-     * @param string $fields E.g. ce_header;Header,ce_rte;RTE,
+     * @param string $fields E.g. fd_header;Header,fd_rte;RTE,
      */
     public static function showIrreFields(string $CType, string $fields)
     {
@@ -288,9 +268,9 @@ class TCAService
     }
 
     /**
-     * Overrides columns which has been defined inside tt_content.php (e.g. ce_select['config']['items'].
+     * Overrides columns which has been defined inside tt_content.php (e.g. fd_select['config']['items'].
      *
-     * @param string $CType     Self-explaning but could be e.g. 'ce_header'.
+     * @param string $CType     Self-explaning but could be e.g. 'fd_header'.
      * @param array  $overrides Array as like a default tt_content array field configuration
      */
     public static function columnsOverridesField(string $CType, array $overrides)
@@ -302,7 +282,7 @@ class TCAService
      * Custom way of adding tt_content palettes.
      *
      * @param string $palette       Unique name of your palette
-     * @param string $fields        E.g. 'ce_header;Label,ce_rte;RTE,' etc.
+     * @param string $fields        E.g. 'fd_header;Label,fd_rte;RTE,' etc.
      * @param array  $additionalArr In case of use for additional values
      * @param string $type          Either 'TCA' or 'SiteConfiguration'
      */
@@ -341,7 +321,7 @@ class TCAService
      * @see \TYPO3\CMS\Core\Utility\ExtensionManagementUtility
      *
      * Copy of \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::class.
-     * Purpose of this copy into TCAService is to avoid dozen of calls of 'TCAService::findConfigBy(...)'
+     * Purpose of this copy into TcaService is to avoid dozen of calls of 'TcaService::findConfigBy(...)'
      * and rather just calling it once which registers everything else by itself, instead of the developer.
      *
      * ===
@@ -446,7 +426,7 @@ class TCAService
 
     /**
      * The fetcher and a helper function for loadCEs.
-     * Can be used outside of TCAService.
+     * Can be used outside of TcaService.
      *
      * @param string $dir            path to 'EXT:/Configuration/TCA/Overrides/'
      * @param bool   $applyLocallang condition whether to apply the locallang or not which is not always necessary
@@ -495,7 +475,7 @@ class TCAService
     public static function loadCEs(string $dir, string $itemGroupIdentifier = 'customelements')
     {
         $CTypes = self::fetchCEs($dir);
-        TCAService::addSelectItems($itemGroupIdentifier, $CTypes);
+        TcaService::addSelectItems($itemGroupIdentifier, $CTypes);
 
         foreach ($CTypes as $label => $CType) {
             $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['TCA_SERVICE']['loadedCEs'][$CType] = true;
@@ -553,7 +533,7 @@ class TCAService
         $path = realpath($path);
 
         if (!$path) {
-            ExceptionUtility::throw('The provided path "' . $path . '" doesn\'t seems to be fine for the TCAService::registerIRREs');
+            ExceptionUtility::throw('The provided path "' . $path . '" doesn\'t seems to be fine for the TcaService::registerIRREs');
         }
 
         if (!StrUtility::endsWith($replacer, '_')) {
@@ -578,7 +558,7 @@ class TCAService
             $irreConfig = include $file;
 
             ExtensionManagementUtility::addTCAcolumns('tt_content', [
-                $fileName => TCAService::findConfigByType('InlineItem', '', $irreConfig['title'], [
+                $fileName => TcaService::findConfigByType('InlineItem', '', $irreConfig['title'], [
                     'foreign_table' => $origFileName,
                 ]),
             ]);
@@ -622,5 +602,58 @@ class TCAService
                 $GLOBALS['TCA']['tt_content']['ctrl']['previewRenderer'] = $renderer;
             }
         }
+    }
+
+    public static function getSqlColumnTypeByConfigType(array $config): ?string
+    {
+        $type = $config['type'];
+        $renderType = $config['renderType'] ?? null;
+        $dbType = $config['dbType'] ?? null;
+        $foreignTable = $config['foreign_table'] ?? null;
+
+        $columnType = '';
+
+        switch ($type) {
+            case 'check':
+                $columnType = 'tinyint';
+
+                if (count($config['items']) >= 2) {
+                    $columnType = 'int';
+                }
+
+                break;
+            case 'input':
+                $columnType = 'varchar';
+
+                if ($columnType == 'datetime') {
+                    $columnType = 'datetime';
+                }
+
+                if ($dbType !== null) {
+                    $columnType = $dbType;
+                }
+
+                break;
+            case 'inline':
+                $columnType = 'int';
+
+                if ($foreignTable == 'sys_file_reference') {
+                    
+                }
+
+                break;
+            case 'text':
+                $columnType = 'text';
+                break;
+            default:
+                # code...
+                break;
+        }
+
+        if ($type == 'input') {
+            $columnType = 'varchar';
+        }
+
+        return null;
     }
 }

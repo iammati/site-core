@@ -40,17 +40,13 @@
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['Backend\Template\Components\ButtonBar']['getButtonsHook'][] = Site\Core\Hook\ButtonBarHook::class.'->loadRequireJsModule';
     }
 
-    if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/helpers.php')) {
-        include $_SERVER['DOCUMENT_ROOT'] . '/helpers.php';
-    }
-
     include \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('site_core', 'helpers.php');
 
     // Automatically registering TypoScript configuration for newContentElement wizard for null TS config by developer
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms']['db_new_content_el']['wizardItemsHook'][] = Site\Core\Hook\WizardItemsHook::class;
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tsparser.php']['preParseFunc']['ll'] = Site\Core\Parser\TypoScriptParser::class.'->ll';
 
-    // The 'default'-cropVariant for the Image field when using site_core's TCAService
+    // The 'default'-cropVariant for the Image field when using site_core's TcaService
     $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['TCA_SERVICE']['cropVariants']['default'] = [
         'desktop' => [
             'title' => 'Desktop',

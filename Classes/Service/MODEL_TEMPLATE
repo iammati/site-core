@@ -1,0 +1,10 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {NAMESPACE};
+
+class {CLASS_NAME} extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+{
+    {CLASS_CONTENT}
+}

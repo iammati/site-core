@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Site\Core\Form\Element;
 
-use Site\Core\Service\TCAService;
+use Site\Core\Service\TcaService;
 use Site\Core\Utility\StandaloneViewUtility;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
 use TYPO3\CMS\Core\Core\Environment;
@@ -30,7 +30,7 @@ class CtypeNameElement extends AbstractFormElement
         $identifier = 'Backend.ContentElements:'.getCeByCtype($CType, false);
         $label = ll(env('BACKEND_EXT'), $identifier)['title'] ?? $identifier;
 
-        $iconIdentifier = TCAService::generateIconIdentifier($CType);
+        $iconIdentifier = TcaService::generateIconIdentifier($CType);
 
         $result['html'] = StandaloneViewUtility::render(
             [
