@@ -3,7 +3,7 @@
     "type": "typo3-cms-extension",
     "description": "Core Extension for a TYPO3 Application.",
     "license": "GPL-2.0-or-later",
-    "version": "1.8.5",
+    "version": "1.8.6",
     "minimum-stability": "stable",
     "authors": [
         {
@@ -21,12 +21,6 @@
         "psr-4": {
             "Site\\Core\\": "Classes/"
         }
-    },
-    "scripts": {
-        "post-autoload-dump": [
-            "Site\\Core\\Composer\\Scripts::postAutoloadDump",
-            "Site\\Core\\Composer\\EnvLoader::postAutoloadDump"
-        ]
     },
     "extra": {
         "typo3/cms": {
