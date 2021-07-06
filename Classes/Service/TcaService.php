@@ -17,6 +17,8 @@ use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\StringUtility;
+
 // use TYPO3\CMS\Extbase\Object\Container\Container;
 
 /**
@@ -39,6 +41,9 @@ class TcaService
 
     protected static FlashUtility $flashUtility;
     protected static EventDispatcherInterface $eventDispatcher;
+
+    const FILE_REFERENCE_NAMESPACE = '\TYPO3\CMS\Extbase\Domain\Model\FileReference';
+    const OBJECT_STORAGE_FILE_REFERENCE_NAMESPACE = '\TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>';
 
     public function __construct()
     {
@@ -604,56 +609,52 @@ class TcaService
         }
     }
 
-    public static function getSqlColumnTypeByConfigType(array $config): ?string
+    public static function config2properties(array $fields): array
     {
-        $type = $config['type'];
-        $renderType = $config['renderType'] ?? null;
-        $dbType = $config['dbType'] ?? null;
-        $foreignTable = $config['foreign_table'] ?? null;
+        $properties = [
+            // inputs and texts
+            'string' => [],
 
-        $columnType = '';
+            // checkboxes
+            'int' => [],
 
-        switch ($type) {
-            case 'check':
-                $columnType = 'tinyint';
+            // FileReferences (images, files etc.)
+            self::FILE_REFERENCE_NAMESPACE => [],
+        ];
 
-                if (count($config['items']) >= 2) {
-                    $columnType = 'int';
+        foreach ($fields as $fieldName => $field) {
+            $type = $field['config']['type'];
+
+            if ($type == 'input' || $type == 'text') {
+                $properties['string'][$fieldName] =  "''";
+            }
+
+            if ($type == 'check') {
+                $properties['int'][$fieldName] =  "''";
+            }
+
+            if ($type == 'inline') {
+                $foreignTable = $field['config']['foreign_table'];
+                $maxItems = $field['config']['maxitems'];
+
+                $fileReferenceNamespace = self::FILE_REFERENCE_NAMESPACE;
+
+                if ($maxItems > 1) {
+                    $fileReferenceNamespace = self::OBJECT_STORAGE_FILE_REFERENCE_NAMESPACE;
                 }
-
-                break;
-            case 'input':
-                $columnType = 'varchar';
-
-                if ($columnType == 'datetime') {
-                    $columnType = 'datetime';
-                }
-
-                if ($dbType !== null) {
-                    $columnType = $dbType;
-                }
-
-                break;
-            case 'inline':
-                $columnType = 'int';
 
                 if ($foreignTable == 'sys_file_reference') {
-                    
+                    $properties[$fileReferenceNamespace][$fieldName] = 'null';
+                } else {
+                    $irresPrefix = ConfigHelper::get(env('BACKEND_EXT'), 'IRREs.prefix');
+
+                    if (str_starts_with($foreignTable, $irresPrefix)) {
+                        /** @todo finish this */
+                    }
                 }
-
-                break;
-            case 'text':
-                $columnType = 'text';
-                break;
-            default:
-                # code...
-                break;
+            }
         }
 
-        if ($type == 'input') {
-            $columnType = 'varchar';
-        }
-
-        return null;
+        return $properties;
     }
 }

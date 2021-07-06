@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Site\Core\Service;
 
-use Site\Core\Helper\ConfigHelper;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 class ModelService
@@ -19,10 +18,9 @@ class ModelService
      */
     public static function generate(string $extKey, string $namespace, string $modelName, array $properties)
     {
-        $autoGenerateModelRepos = ConfigHelper::get(env('FRONTEND_EXT'), 'ContentElements.rendering.autoGenerateModelRepos');
         $modelPath = ExtensionManagementUtility::extPath($extKey).'Classes/Domain/Model/'.$modelName.'.php';
 
-        if ($autoGenerateModelRepos === true && !file_exists($modelPath)) {
+        if (!file_exists($modelPath)) {
             $flashUtility = new \Site\Core\Utility\FlashUtility();
 
             $mainPath = ExtensionManagementUtility::extPath(env('CORE_EXT'));
@@ -59,7 +57,11 @@ class ModelService
 
         foreach ($properties as $varType => $propertyDatas) {
             foreach ($propertyDatas as $property => $value) {
-                $dataContent .= "protected $varType $".$property." = ".$value.";
+                $dataContent .= "
+    /**
+     * @var $varType
+     */
+    protected $".$property." = ".$value.";
     ";
             }
         }
@@ -71,12 +73,12 @@ class ModelService
                 ++$i;
 
                 $setterGetter = "
-    public function set".ucfirst($property)."($varType \$$property)
+    public function set".ucfirst($property)."(\$$property)
     {
         \$this->$property = $$property;
     }
 
-    public function get".ucfirst($property)."(): $varType
+    public function get".ucfirst($property)."()
     {
         return \$this->$property;
     }";
