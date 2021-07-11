@@ -9,8 +9,6 @@ class InlineItem extends Field implements FieldInterface
 {
     public static function make(string $label, array $fieldConfig = [])
     {
-        return TCAService::findConfigByType('InlineItem', '', $label, [
-            'foreign_table' => $fieldConfig['config']['foreign_table'],
-        ]);
+        return TCAService::findConfigByType('InlineItem', '', $label, $fieldConfig['config']);
     }
 }

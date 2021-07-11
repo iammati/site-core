@@ -1,29 +1,37 @@
-on:
-  push:
-    # Sequence of patterns matched against refs/tags
-    tags:
-      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
-
 name: Create Release
 
+on:
+    push:
+        # Push events to matching v*, i.e. v1.0, v20.15.10
+        tags:
+            - 'v*'
+
 jobs:
-  build:
-    name: Create Release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: |
-            Changes in this Release
-            - First Change
-            - Second Change
-          draft: false
-          prerelease: false
+    build:
+        name: Create Release
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+                uses: actions/checkout@v2
+                with:
+                    fetch-depth: 0
+            - name: changelog
+                uses: scottbrenner/generate-changelog-action@master
+                id: Changelog
+                env:
+                    REPO: ${{ github.repository }}
+            - name: Set output
+                id: vars
+                run: echo ::set-output name=tag::${GITHUB_REF:10}
+            - name: Create Release
+                id: create_release
+                uses: actions/create-release@latest
+                env:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+              with:
+                    tag_name: ${{ steps.vars.outputs.tag }}
+                    release_name: Release ${{ steps.vars.outputs.tag }}
+                    body: |
+                        ${{ steps.Changelog.outputs.changelog }}
+                    draft: false
+                    prerelease: false
