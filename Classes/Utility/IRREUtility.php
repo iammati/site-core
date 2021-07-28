@@ -70,6 +70,7 @@ class IRREUtility
                 $queryBuilder->expr()->eq('pid', $pid),
                 $queryBuilder->expr()->eq('sys_language_uid', $languageId),
             )
+            ->orderBy('sorting')
             ->execute()
             ->fetchAllAssociative();
 
