@@ -92,4 +92,9 @@
             ],
         ],
     ];
+
+    // Global namespace registration for 's' => 'Site\Core\ViewHelpers'
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['s'] = [
+        'Site\Core\ViewHelpers',
+    ];
 })();
