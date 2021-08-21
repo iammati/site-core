@@ -13,7 +13,7 @@ class RecordHelper
     /**
      * @var QueryBuilder
      */
-    protected $queryBuilder = null;
+    protected $queryBuilder;
 
     /**
      * @var string
@@ -48,12 +48,10 @@ class RecordHelper
      * Adder for the expressions.
      *
      * @param string $expr Any kind of expression e.g. $this->queryBuilder->expr()->eq($field, $queryBuilder->createNamedParameter($value))
-     *
-     * @return void
      */
     public function addExpression(string $expr)
     {
-        if ($this->expressions != '') {
+        if ('' != $this->expressions) {
             $this->expressions .= ' AND '.$expr;
         } else {
             $this->expressions .= $expr;

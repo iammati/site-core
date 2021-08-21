@@ -8,23 +8,24 @@ use Site\Core\Service\LocalizationService;
 use Site\Core\Utility\ExceptionUtility;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 (new EnvLoader())->postAutoloadDump();
 
 if (!function_exists('ll')) {
     /**
-     * Localization helper. Usage can be anywhere after the core extension has been loaded.
-     *
      * @param string $extKey           The extension-key
      * @param string $locallangLabel   The label to be locallized
      * @param string $twoLetterIsoCode The twoLetterIsoCode e.g. 'de' or 'en'
      *
-     * @return mixed
-     *
      * @throws Exception
      */
-    function ll(string $extKey, string $locallangLabel, string $langCode = '')
+    function ll(string $extKey, string $locallangLabel, string $langCode = ''): mixed
     {
+        if (serverRequest()->getUri() === null) {
+            return '';
+        }
+
         /** @var LocalizationService $localizationService */
         $localizationService = GeneralUtility::makeInstance(LocalizationService::class);
 
@@ -32,20 +33,19 @@ if (!function_exists('ll')) {
             return $localizationService->findByKey($extKey, $locallangLabel, $langCode);
         }
 
-        ExceptionUtility::throw('LocalizationService: The "'.$extKey.'" has not been registered yet thus can\'t access the locallized key for "'.$locallangLabel.'".');
+        ExceptionUtility::throw(
+            'LocalizationService: The "'.$extKey.'" has not been registered yet thus can\'t access the locallized key for "'.$locallangLabel.'".',
+            1628367963
+        );
     }
 }
 
 if (!function_exists('env')) {
     /**
-     * Dotenv helper. Usage can be anywhere after the core extension has been loaded.
+     * Dotenv helper - usage can be anywhere after the core extension has been loaded.
      * Reads a value by the .env-file from your web-server's root directory.
-     *
-     * @param string $key
-     *
-     * @return null|string
      */
-    function env(string $key)
+    function env(string $key): ?string
     {
         $value = getenv($key);
 
@@ -58,11 +58,7 @@ if (!function_exists('env')) {
 }
 
 if (!function_exists('serverRequest')) {
-    /**
-     * Helper to easier get the current HTTP server request.
-     *
-     * @return ServerRequest
-     */
+    /** Helper to easier get the current HTTP server request. */
     function serverRequest(): ServerRequest
     {
         return $GLOBALS['TYPO3_REQUEST'] ?: GeneralUtility::makeInstance(ServerRequest::class);
@@ -72,36 +68,42 @@ if (!function_exists('serverRequest')) {
 if (!function_exists('frontend')) {
     /**
      * Helper to easier get the current frontend instance by TYPO3.
-     *
-     * @return TypoScriptFrontendController
+     * Formerly known as $GLOBALS['TSFE'].
      */
-    function frontend()
+    function frontend(): TypoScriptFrontendController
     {
         return $GLOBALS['TSFE'];
     }
 }
 
 if (!function_exists('ed')) {
-    /**
-     * @param mixed $args
-     * 
-     * @return string
-     */
-    function ed(...$args)
+    function ed(mixed ...$args)
     {
         \TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump(...$args);
     }
 }
 
 if (!function_exists('edd')) {
-    /**
-     * @param mixed $args
-     * 
-     * @return string
-     */
-    function edd(...$args)
+    function edd(mixed ...$args): void
     {
         ed($args);
-        die;
+
+        exit;
+    }
+}
+
+if (!function_exists('renderView')) {
+    function renderView(array $rootPaths, string $templatePath, array $data = []): string
+    {
+        $view = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(Site\Core\View\FluidStandaloneView::class)->create($rootPaths);
+
+        $view->getTemplatePaths()->setTemplatePathAndFilename(
+            // \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName('EXT:site_core/Resources/Private/Error/Templates/'.$templateName.'.html')
+            \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($templatePath)
+        );
+
+        $view->assignMultiple($data);
+
+        return $view->render();
     }
 }

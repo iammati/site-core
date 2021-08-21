@@ -45,8 +45,6 @@ class AjaxRequest
      * Function to set this Ajax' request property.
      *
      * @param ServerRequestInterface $serverRequest
-     *
-     * @return void
      */
     public function setServerRequest($serverRequest)
     {
@@ -67,8 +65,6 @@ class AjaxRequest
      * Function to set this Ajax' handler property.
      *
      * @param RequestHandlerInterface $requestHandler
-     *
-     * @return void
      */
     public function setRequestHandler($requestHandler)
     {
@@ -77,8 +73,6 @@ class AjaxRequest
 
     /**
      * Function to set this Ajax' handler property.
-     *
-     * @return void
      */
     public function getRequestHandler()
     {
@@ -94,10 +88,10 @@ class AjaxRequest
      * if used with other request types.
      *
      * @param string      $actionName     Name of the action to forward to
-     * @param string|null $controllerName Unqualified object name of the controller to forward to. If not specified, the current controller is used.
-     * @param string|null $extensionName  Name of the extension containing the controller to forward to. If not specified, the current extension is assumed.
-     * @param array|null  $arguments      Arguments to pass to the target action
-     * @param int|null    $pageUid        Target page uid. If NULL, the current page uid is used
+     * @param null|string $controllerName Unqualified object name of the controller to forward to. If not specified, the current controller is used.
+     * @param null|string $extensionName  Name of the extension containing the controller to forward to. If not specified, the current extension is assumed.
+     * @param null|array  $arguments      Arguments to pass to the target action
+     * @param null|int    $pageUid        Target page uid. If NULL, the current page uid is used
      * @param int         $delay          (optional) The delay in seconds. Default is no delay.
      * @param int         $statusCode     (optional) The HTTP status code for the redirect. Default is '303 See Other
      *
@@ -146,7 +140,7 @@ class AjaxRequest
         // This means that even when an action is configured as cachable
         // we avoid the plugin to be cached, but keep the page cache untouched
         $contentObject = $this->configurationManager->getContentObject();
-        if ($contentObject->getUserObjectType() === ContentObjectRenderer::OBJECTTYPE_USER) {
+        if (ContentObjectRenderer::OBJECTTYPE_USER === $contentObject->getUserObjectType()) {
             $contentObject->convertToUserIntObject();
         }
 

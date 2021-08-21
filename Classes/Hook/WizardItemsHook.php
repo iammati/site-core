@@ -19,7 +19,6 @@ class WizardItemsHook implements NewContentElementWizardHookInterface
 {
     public function manipulateWizardItems(&$wizardItems, &$parentObject)
     {
-        $customerProject = env('CUSTOMER_PROJECT');
         $backendExt = env('BACKEND_EXT');
 
         $path = ExtensionManagementUtility::extPath($backendExt, 'Configuration/TCA/Overrides/');
@@ -27,7 +26,7 @@ class WizardItemsHook implements NewContentElementWizardHookInterface
 
         $customWizardItems = [];
 
-        if (sizeof($CTypes) !== 0) {
+        if (0 !== sizeof($CTypes)) {
             foreach ($CTypes as $CType) {
                 $ctypeName = explode('_', $CType)[1];
 
@@ -35,7 +34,7 @@ class WizardItemsHook implements NewContentElementWizardHookInterface
                 $locallizedCE = ll($backendExt, $identifiers);
 
                 $elementConfiguration = [
-                    'iconIdentifier' => $customerProject.'ce-'.$ctypeName,
+                    'iconIdentifier' => $backendExt.'ce-'.$ctypeName,
 
                     'title' => $locallizedCE['title'] ?? $CType,
                     'description' => $locallizedCE['description'] ?? '',

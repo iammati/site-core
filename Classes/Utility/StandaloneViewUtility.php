@@ -17,11 +17,12 @@ class StandaloneViewUtility
      * @param array  $assign    Set/Data for assigned to the template
      * @param bool   $echo      Simply echo the rendered view (which returns then a true) or return (the HTML) back
      *
-     * @return string|array|void
-     *
      * @throws Exception
+     *
+     * @return array|string|void
      */
-    public static function render(array $rootPaths = null, string $template = null, array $assign = null, bool $echo = false) {
+    public static function render(array $rootPaths = null, string $template = null, array $assign = null, bool $echo = false)
+    {
         $exWord = '';
 
         if (is_null($rootPaths)) {
@@ -32,26 +33,26 @@ class StandaloneViewUtility
             $exWord = 'a Template-File';
         }
 
-        if ($exWord != '') {
+        if ('' != $exWord) {
             throw new Exception('StandaloneViewUtility - can\'t render a view without '.$exWord);
         }
 
         $standaloneView = GeneralUtility::makeInstance(\TYPO3\CMS\Fluid\View\StandaloneView::class);
 
         foreach ($rootPaths as $type => $path) {
-            if ($type == 'Templates') {
+            if ('Templates' == $type) {
                 $standaloneView->setTemplateRootPaths([
                     GeneralUtility::getFileAbsFileName($path),
                 ]);
             }
 
-            if ($type == 'Layouts') {
+            if ('Layouts' == $type) {
                 $standaloneView->setLayoutRootPaths([
                     GeneralUtility::getFileAbsFileName($path),
                 ]);
             }
 
-            if ($type == 'Partials') {
+            if ('Partials' == $type) {
                 $standaloneView->setPartialRootPaths([
                     GeneralUtility::getFileAbsFileName($path),
                 ]);

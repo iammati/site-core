@@ -7,19 +7,19 @@ namespace Site\Core\Utility;
 class CurlUtility
 {
     /**
-     * @var resource|false|\CurlHandle
+     * @var \CurlHandle|false|resource
      */
-    protected $curl = null;
+    protected $curl;
 
     /**
-     * @var string|bool
+     * @var bool|string
      */
     protected $response = false;
 
     /**
      * Retrieves the curl obejct.
-     * 
-     * @return resource|false|\CurlHandle
+     *
+     * @return \CurlHandle|false|resource
      */
     public function getCurl()
     {
@@ -28,8 +28,8 @@ class CurlUtility
 
     /**
      * Retrieves the response of the executed cURL.
-     * 
-     * @return string|bool
+     *
+     * @return bool|string
      */
     public function getResponse()
     {
@@ -40,13 +40,13 @@ class CurlUtility
      * Executes a cURL request to the provided URI with additional query-params.
      * Method does not supports post parameters. You might try out in such
      * an use-case the executeParams-method.
-     * 
+     *
      * @param string $uri
-     * @param array $params
-     * 
+     * @param array  $params
+     *
      * @see executeParams
-     * 
-     * @return this
+     *
+     * @return $this
      */
     public function execute($uri)
     {
@@ -77,6 +77,5 @@ class CurlUtility
      */
     public function executeParams()
     {
-
     }
 }

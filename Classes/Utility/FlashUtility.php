@@ -16,8 +16,6 @@ class FlashUtility
      * @param \TYPO3\CMS\Core\Messaging\FlashMessage $severity
      *                                                            -  const NOTICE = -2;
      * @param bool                                   $storeInSess
-     *
-     * @return void
      */
     public function message($header = '', $bodytext = '', $severity, $storeInSess = false)
     {

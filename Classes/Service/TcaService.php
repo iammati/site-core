@@ -17,7 +17,6 @@ use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\StringUtility;
 
 // use TYPO3\CMS\Extbase\Object\Container\Container;
 
@@ -37,13 +36,12 @@ use TYPO3\CMS\Core\Utility\StringUtility;
  */
 class TcaService
 {
-    protected static string $TCAServiceConfigs = __DIR__ . '/../../Configuration/Fields';
+    public const FILE_REFERENCE_NAMESPACE = '\TYPO3\CMS\Extbase\Domain\Model\FileReference';
+    public const OBJECT_STORAGE_FILE_REFERENCE_NAMESPACE = '\TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>';
+    protected static string $TCAServiceConfigs = __DIR__.'/../../Configuration/Fields';
 
     protected static FlashUtility $flashUtility;
     protected static EventDispatcherInterface $eventDispatcher;
-
-    const FILE_REFERENCE_NAMESPACE = '\TYPO3\CMS\Extbase\Domain\Model\FileReference';
-    const OBJECT_STORAGE_FILE_REFERENCE_NAMESPACE = '\TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>';
 
     public function __construct()
     {
@@ -70,19 +68,19 @@ class TcaService
     ) {
         self::$flashUtility = GeneralUtility::makeInstance(FlashUtility::class);
 
-        $filepath = __DIR__ . '/../../Configuration/Fields/' . $type . '.php';
+        $filepath = __DIR__.'/../../Configuration/Fields/'.$type.'.php';
         $realpath = realpath($filepath);
 
         $field = null;
 
         if (!realpath(self::$TCAServiceConfigs)) {
-            self::$flashUtility->message('TcaService - Missing Configs-Directory', 'Following directory missing: ' . self::$TCAServiceConfigs, 2);
+            self::$flashUtility->message('TcaService - Missing Configs-Directory', 'Following directory missing: '.self::$TCAServiceConfigs, 2);
 
             return 'TcaService Error - $TCAServiceConfigs.';
         }
 
         if (!$realpath) {
-            self::$flashUtility->message('TcaService - Type: "' . $type . '".php does not exists', 'Create this file in order to make it working', 3);
+            self::$flashUtility->message('TcaService - Type: "'.$type.'".php does not exists', 'Create this file in order to make it working', 3);
         } else {
             $config = include $filepath;
 
@@ -118,7 +116,7 @@ class TcaService
                     if ($i == $size) {
                         $nitems .= $item;
                     } else {
-                        $nitems .= $item . ', ';
+                        $nitems .= $item.', ';
                         ++$i;
                     }
                 }
@@ -130,7 +128,7 @@ class TcaService
                 $config['ctrl']['searchFields'] = $nitems;
 
                 // Show items
-                $config['types']['showitem'] = str_replace('{SHOW_ITEMS}', $nitems, $config['types']['showitem']);
+                $config['types']['showitem'] = str_replace('{SHOW_ITEMS}', $nitems, $config['types']['showitem'] ?? '');
 
                 // Tab name
                 $tabName = $additionalConfig['title'] ?? 'Item';
@@ -217,14 +215,14 @@ class TcaService
                 $additionalFields .= ',';
             }
 
-            $fields = $fields . $additionalFields;
+            $fields = $fields.$additionalFields;
         }
 
         $defaultShowitem = '
             --div--;Content Element,
-                ctypeNameField,' .
-                $fields .
-                'parentid,' .
+                ctypeNameField,'.
+                $fields.
+                'parentid,'.
             '
             --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
                 --palette--;;general,
@@ -311,10 +309,12 @@ class TcaService
                 $GLOBALS['SiteConfiguration']['site']['palettes'][$palette] = $array;
 
                 break;
+
             case 'TCA':
                 $GLOBALS['TCA'][$table]['palettes'][$palette] = $array;
 
                 break;
+
             default:
                 self::$flashUtility->message('header', 'bodytext', 1);
 
@@ -393,7 +393,8 @@ class TcaService
                 $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($pid)),
                 $queryBuilder->expr()->eq($column, $queryBuilder->createNamedParameter($value))
             )
-            ->execute();
+            ->execute()
+        ;
     }
 
     /**
@@ -412,7 +413,7 @@ class TcaService
             $fieldNames[] = $fieldName;
         }
 
-        $GLOBALS['SiteConfiguration']['site']['types']['0']['showitem'] .= ',' . "\n" . '                --div--;' . $tabName . ', ' . implode(',', $fieldNames);
+        $GLOBALS['SiteConfiguration']['site']['types']['0']['showitem'] .= ','."\n".'                --div--;'.$tabName.', '.implode(',', $fieldNames);
     }
 
     /**
@@ -455,12 +456,12 @@ class TcaService
 
         if ($applyLocallang) {
             foreach ($CTypes as $key => $CType) {
-                $identifier = 'Backend.ContentElements:' . getCeByCtype($CType, false);
+                $identifier = 'Backend.ContentElements:'.getCeByCtype($CType, false);
 
                 $localizedLabel = ll(
                     env('BACKEND_EXT'),
                     $identifier
-                )['title'] ?? $CType . ' - "' . $identifier . '"-localization is not configured';
+                )['title'] ?? $CType.' - "'.$identifier.'"-localization is not configured';
 
                 $CTypes[$localizedLabel] = $CType;
                 unset($CTypes[$key]);
@@ -504,10 +505,10 @@ class TcaService
             $fileNameWithExtension = $file->getRelativePathname();
             $fileName = str_replace('.php', '', $fileNameWithExtension);
 
-            $identifier = str_replace('_', '-', $extKey) . '-' . str_replace('_', '-', $fileName);
+            $identifier = str_replace('_', '-', $extKey).'-'.str_replace('_', '-', $fileName);
             $fileNameWithoutCE = str_replace('ce_', '', $fileName);
 
-            $svgResourcesPath = 'Resources/Public/Icons/ContentElements/' . $fileNameWithoutCE . '.svg';
+            $svgResourcesPath = 'Resources/Public/Icons/ContentElements/'.$fileNameWithoutCE.'.svg';
             $svgPath = ExtensionManagementUtility::extPath($extKey, $svgResourcesPath);
 
             if (file_exists($svgPath)) {
@@ -515,7 +516,7 @@ class TcaService
                     $identifier,
                     SvgIconProvider::class,
                     [
-                        'source' => 'EXT:' . $extKey . '/' . $svgResourcesPath,
+                        'source' => 'EXT:'.$extKey.'/'.$svgResourcesPath,
                     ]
                 );
             }
@@ -538,7 +539,7 @@ class TcaService
         $path = realpath($path);
 
         if (!$path) {
-            ExceptionUtility::throw('The provided path "' . $path . '" doesn\'t seems to be fine for the TcaService::registerIRREs');
+            ExceptionUtility::throw('The provided path "'.$path.'" doesn\'t seems to be fine for the TcaService::registerIRREs');
         }
 
         if (!StrUtility::endsWith($replacer, '_')) {
@@ -547,7 +548,7 @@ class TcaService
 
         $irrePrefix = ConfigHelper::get(env('BACKEND_EXT'), 'IRREs.itemPrefix') ?? 'irre_';
 
-        $finder = FileUtility::retrieveFilesByPath($path)->name($replacer . '*.php');
+        $finder = FileUtility::retrieveFilesByPath($path)->name($replacer.'*.php');
 
         foreach ($finder as $file) {
             $fileNameWithExtension = $file->getRelativePathname();
@@ -583,7 +584,7 @@ class TcaService
     {
         $backendExt = str_replace('_', '-', env('BACKEND_EXT'));
 
-        return $backendExt . '-' . str_replace('_', '-', $CType);
+        return $backendExt.'-'.str_replace('_', '-', $CType);
     }
 
     /**
@@ -625,15 +626,15 @@ class TcaService
         foreach ($fields as $fieldName => $field) {
             $type = $field['config']['type'];
 
-            if ($type == 'input' || $type == 'text') {
-                $properties['string'][$fieldName] =  "''";
+            if ('input' == $type || 'text' == $type) {
+                $properties['string'][$fieldName] = "''";
             }
 
-            if ($type == 'check') {
-                $properties['int'][$fieldName] =  "''";
+            if ('check' == $type) {
+                $properties['int'][$fieldName] = "''";
             }
 
-            if ($type == 'inline') {
+            if ('inline' == $type) {
                 $foreignTable = $field['config']['foreign_table'];
                 $maxItems = $field['config']['maxitems'];
 
@@ -643,13 +644,13 @@ class TcaService
                     $fileReferenceNamespace = self::OBJECT_STORAGE_FILE_REFERENCE_NAMESPACE;
                 }
 
-                if ($foreignTable == 'sys_file_reference') {
+                if ('sys_file_reference' == $foreignTable) {
                     $properties[$fileReferenceNamespace][$fieldName] = 'null';
                 } else {
                     $irresPrefix = ConfigHelper::get(env('BACKEND_EXT'), 'IRREs.prefix');
 
                     if (str_starts_with($foreignTable, $irresPrefix)) {
-                        /** @todo finish this */
+                        // @todo finish this
                     }
                 }
             }

@@ -3,7 +3,11 @@
 use Site\Core\Utility\ExceptionUtility;
 use Site\Core\Utility\FieldUtility;
 
-$fieldName = $config['fieldConfig']['fieldName'] ?? ExceptionUtility::throw('The field "File" requires a configured "fieldName"-fieldConfig value.');
+$fieldName = $config['fieldConfig']['fieldName'] ?? ExceptionUtility::throw(
+    'The field "File" requires a configured "fieldName"-fieldConfig value.',
+    1628330053
+);
+
 
 $minItems = $config['fieldConfig']['minItems'] ?? 0;
 $maxItems = $config['fieldConfig']['maxItems'] ?? 1;
@@ -15,9 +19,7 @@ $fileExtensions = $config['fieldConfig']['fileExtensions'] ??
     )
 ;
 
-unset($config['fieldConfig']['fieldName']);
-unset($config['fieldConfig']['minItems']);
-unset($config['fieldConfig']['maxItems']);
+unset($config['fieldConfig']['fieldName'], $config['fieldConfig']['minItems'], $config['fieldConfig']['maxItems']);
 
 return FieldUtility::createByConfig([
     'exclude' => 0,
@@ -25,7 +27,6 @@ return FieldUtility::createByConfig([
 
     'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
         $fieldName,
-
         [
             'minitems' => $minItems,
             'maxitems' => $maxItems,
@@ -34,7 +35,6 @@ return FieldUtility::createByConfig([
                 'createNewRelationLinkTitle' => 'Add File',
             ],
         ],
-
         $fileExtensions
     ),
 ], $config);

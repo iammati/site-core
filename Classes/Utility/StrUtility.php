@@ -50,7 +50,7 @@ class StrUtility
      */
     public static function contains($haystack, $needle)
     {
-        return strpos($haystack, $needle) !== false;
+        return false !== strpos($haystack, $needle);
     }
 
     /**
@@ -62,7 +62,7 @@ class StrUtility
      */
     public static function startsWithNumber($haystack)
     {
-        return preg_match('/^\d/', $haystack) === 1;
+        return 1 === preg_match('/^\d/', $haystack);
     }
 
     /**
@@ -88,7 +88,7 @@ class StrUtility
         $haystack = preg_replace($accentsRegex, '$1', htmlentities($haystack, ENT_QUOTES, 'UTF-8'));
         $haystack = preg_replace('/[^a-z0-9]/u', $separator, $haystack);
 
-        if ($separator != '') {
+        if ('' != $separator) {
             // $haystack = preg_replace('/[$separator]+/u', $separator, $haystack);
         }
 
@@ -113,14 +113,13 @@ class StrUtility
      *
      * @param string $str
      * @param string $glue
-     *
-     * @return void
      */
-    public static function toSnakeCase($str, $glue = '_') {
+    public static function toSnakeCase($str, $glue = '_')
+    {
         $snakeCaseStr = preg_replace_callback(
             '/[A-Z]/',
-            function($matches) use($glue) {
-                return $glue . strtolower($matches[0]);
+            function ($matches) use ($glue) {
+                return $glue.strtolower($matches[0]);
             },
             $str
         );

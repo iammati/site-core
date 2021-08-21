@@ -35,7 +35,8 @@ class IRREUtility
                 $queryBuilder->expr()->eq($fieldName, $parentid),
                 $queryBuilder->expr()->eq('sys_language_uid', $languageId),
             )
-            ->execute();
+            ->execute()
+        ;
     }
 
     /**
@@ -70,8 +71,10 @@ class IRREUtility
                 $queryBuilder->expr()->eq('pid', $pid),
                 $queryBuilder->expr()->eq('sys_language_uid', $languageId),
             )
+            ->orderBy('sorting')
             ->execute()
-            ->fetchAllAssociative();
+            ->fetchAllAssociative()
+        ;
 
         $models = [];
 

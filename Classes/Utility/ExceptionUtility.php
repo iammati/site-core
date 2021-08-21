@@ -38,12 +38,11 @@ class ExceptionUtility extends Exception
      * @param bool   $liveBackendNotification Optional.
      *                                        - If it's true it'll notify the backend, through the SocketComponent::class with a live-notification - only if TYPO3_MODE equals FE.
      *
-     * @return void
-     *
      * @throws Exception
      */
     public static function throw(
         string $message,
+        int $code = -1,
         $level = \TYPO3\CMS\Core\Log\LogLevel::ERROR,
         array $data = [],
         bool $liveBackendNotification = false
@@ -51,20 +50,18 @@ class ExceptionUtility extends Exception
         $context = Environment::getContext();
 
         if ($context->isDevelopment()) {
-            throw new Exception($message);
+            throw new Exception($message, $code);
         }
 
         if ($liveBackendNotification && TYPO3_MODE == 'FE') {
-            /* @todo make live backend notification */
+            // @todo make live backend notification
         }
 
-        if ($context->isProduction()) {
-            $logger = GeneralUtility::makeInstance(Logger::class, ...[
-                $message,
-                time(),
-            ]);
+        $logger = GeneralUtility::makeInstance(Logger::class, ...[
+            $message,
+            time(),
+        ]);
 
-            $logger->log($level, $message, $data);
-        }
+        $logger->log($level, $message, $data);
     }
 }

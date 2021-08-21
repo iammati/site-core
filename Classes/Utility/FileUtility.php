@@ -16,9 +16,7 @@ class FileUtility
      * @param int|string                                   $uid
      * @param string                                       $tableName
      * @param string                                       $fieldName
-     * @param \TYPO3\CMS\Core\Resource\FileRepository|null $fileRepo
-     *
-     * @return void
+     * @param null|\TYPO3\CMS\Core\Resource\FileRepository $fileRepo
      */
     public static function findFilesBy($uid, $tableName, $fieldName, $fileRepo = null)
     {

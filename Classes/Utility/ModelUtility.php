@@ -23,7 +23,8 @@ class ModelUtility
             )
 
             ->set($column, $value)
-        ->execute();
+            ->execute()
+        ;
 
         return $value;
     }
@@ -41,8 +42,9 @@ class ModelUtility
             ->where(
                 $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($uid))
             )
-        ->execute()
-        ->fetch();
+            ->execute()
+            ->fetch()
+        ;
 
         dd([$result, $column, $value]);
         if (is_array($result)) {

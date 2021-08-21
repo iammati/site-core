@@ -44,7 +44,7 @@ class AjaxMiddleware implements MiddlewareInterface
                 $path = substr($path, 0, -1);
             }
 
-            $ajaxId = $queryParams['vendor'] . '/' . $queryParams['ajax'];
+            $ajaxId = $queryParams['vendor'].'/'.$queryParams['ajax'];
 
             $method = 'process';
 

@@ -12,8 +12,6 @@ class ConfigViewHelper extends AbstractViewHelper
 {
     /**
      * Initialization of required arguments for this ViewHelper.
-     *
-     * @return void
      */
     public function initializeArguments()
     {

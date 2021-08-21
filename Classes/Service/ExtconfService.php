@@ -23,14 +23,13 @@ class ExtconfService
 
         dd($packages);
 
-        if ($packages['container'] === null || $packages['site_core']) {
-
+        if (null === $packages['container'] || $packages['site_core']) {
         }
 
         $container = $packages['container'];
         unset($packages['container']);
 
-        array_filter($packages, function($key) use($packages) {
+        array_filter($packages, function ($key) use ($packages) {
             $package = $packages[$key];
             dd($key, $package);
         }, ARRAY_FILTER_USE_KEY);

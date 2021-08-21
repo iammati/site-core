@@ -28,10 +28,10 @@ class FluidStandaloneView
 
         if (is_array($rootPathsOrTemplatePath)) {
             foreach ($rootPathsOrTemplatePath as $type => $paths) {
-                $method = 'set' . ucfirst($type) . 'RootPaths';
+                $method = 'set'.ucfirst($type).'RootPaths';
 
                 if (!is_array($paths)) {
-                    throw new Exception('The passed paths for ' . $type . ' must be an array, string given!');
+                    throw new Exception('The passed paths for '.$type.' must be an array, string given!');
                 }
 
                 foreach ($paths ?? [] as $i => $path) {

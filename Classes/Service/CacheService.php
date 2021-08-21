@@ -26,8 +26,6 @@ class CacheService implements CacheInterface
      * will be created and read from.
      *
      * @param string $path a relative path of the server
-     *
-     * @return void
      */
     public function setPath($path)
     {
@@ -40,14 +38,12 @@ class CacheService implements CacheInterface
      * @param string $identifier Optional. If given, it'll used the defined $this->path and
      *                           appends the provided $identifier string additionally.
      *                           Must not start with a '/' (slash).
-     *
-     * @return void
      */
     public function getPath(string $identifier = '')
     {
         $path = $this->path;
 
-        if ($identifier == '') {
+        if ('' == $identifier) {
             return $path;
         }
 
@@ -66,8 +62,6 @@ class CacheService implements CacheInterface
      *
      * @param string $fileExtension The file-extension passed as string and without
      *                              a '.' (dot) - just the extension itself in lowercase.
-     *
-     * @return void
      */
     public function setFileExtension($fileExtension)
     {
@@ -76,8 +70,6 @@ class CacheService implements CacheInterface
 
     /**
      * Retrieves the file-extension of this cache service.
-     *
-     * @return void
      */
     public function getFileExtension()
     {
@@ -101,7 +93,7 @@ class CacheService implements CacheInterface
      * Retrieves a cached file by its identifier.
      *
      * @param string        $identifier        The identifier of the cached file - converted to a friendly readable string
-     * @param \Closure|null $notCachedCallback Optional. If provided, this closure will be called
+     * @param null|\Closure $notCachedCallback Optional. If provided, this closure will be called
      *                                         in case there's no cached file found by the given identifier,
      *                                         which will then cache it immediately by the returned data.
      *
@@ -112,7 +104,7 @@ class CacheService implements CacheInterface
         $identifier = StrUtility::convertUri($identifier);
 
         if (!$this->has($identifier)) {
-            if ($notCachedCallback == null) {
+            if (null == $notCachedCallback) {
                 return false;
             }
 
@@ -159,14 +151,12 @@ class CacheService implements CacheInterface
      * Deletes a cache by its identifier if its present.
      *
      * @param string $identifier The filename used to be called
-     *
-     * @return void
      */
     public function remove(string $identifier)
     {
         $cacheFilePath = $this->getPath($identifier.'.'.$this->getFileExtension());
 
-        if ($identifier == '*') {
+        if ('*' == $identifier) {
             $cachedFiles = glob($cacheFilePath);
 
             foreach ($cachedFiles as $file) {
@@ -185,8 +175,6 @@ class CacheService implements CacheInterface
      * Optimizes the given $data HTML string to minimize the output HTML as a performance optimization.
      *
      * @param string $data The HTML string which should be optimized
-     *
-     * @return void
      *
      * @todo Find a way to minify / compress it down the HTML as an oneliner.
      */
@@ -216,8 +204,6 @@ class CacheService implements CacheInterface
             '=$1',
         ];
 
-        $data = preg_replace($search, $replace, $data);
-
-        return $data;
+        return preg_replace($search, $replace, $data);
     }
 }

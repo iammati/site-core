@@ -8,8 +8,6 @@ class HtmlCacheService extends CacheService
 {
     /**
      * Defines caching path and file extension of this class.
-     *
-     * @return void
      */
     public function __construct()
     {

@@ -21,7 +21,7 @@ class BackendUserService
      * represents the logged-in BE-User's session-id and via queries it fetches
      * the uid of that one and additionally a findByUid using the BackendUserRepository.
      *
-     * @return BackendUser|null
+     * @return null|BackendUser
      */
     public function getUser()
     {
@@ -39,8 +39,9 @@ class BackendUserService
             ->where(
                 $queryBuilder->expr()->eq('ses_id', $queryBuilder->createNamedParameter($cookieSesId))
             )
-        ->execute()
-        ->fetch(0);
+            ->execute()
+            ->fetch(0)
+        ;
 
         if (!$res) {
             return null;
@@ -56,7 +57,7 @@ class BackendUserService
     }
 
     /**
-     * @return array|null
+     * @return null|array
      */
     protected function findUcByUid(int $uid)
     {
@@ -68,8 +69,9 @@ class BackendUserService
             ->where(
                 $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($uid))
             )
-        ->execute()
-        ->fetch(0);
+            ->execute()
+            ->fetch(0)
+        ;
 
         if (!$res) {
             return null;

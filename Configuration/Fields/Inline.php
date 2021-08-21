@@ -45,8 +45,8 @@ $ctrlArr = [
     'types' => [
         '1' => [
             'showitem' => '
-                --div--;' . $additionalConfig['title'] . ',
-                    ' . $columns . ',
+                --div--;'.$additionalConfig['title'].',
+                    '.$columns.',
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,
                     --palette--;;language,
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,

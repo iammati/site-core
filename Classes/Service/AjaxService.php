@@ -21,8 +21,6 @@ class AjaxService
     /**
      * Registers an AJAX-configuration with a custom identifier.
      * Optionally also overrides if the third parameter ($override) is set to true.
-     *
-     * @return void
      */
     public function register(string $identifier, array $config, bool $override = false)
     {
@@ -36,8 +34,6 @@ class AjaxService
     /**
      * Finder which returns, if present, the AJAX-configuration by its identifier.
      * If not found it returns by default null.
-     *
-     * @return void
      */
     public function findByIdentifier(string $identifier)
     {

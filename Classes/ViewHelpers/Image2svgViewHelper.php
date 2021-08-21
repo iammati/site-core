@@ -17,8 +17,6 @@ class Image2svgViewHelper extends AbstractViewHelper
 {
     /**
      * Initialization of required arguments for this ViewHelper.
-     *
-     * @return void
      */
     public function initializeArguments()
     {
@@ -27,8 +25,6 @@ class Image2svgViewHelper extends AbstractViewHelper
 
     /**
      * The actual render logic whenever this VH gets called.
-     *
-     * @return void
      */
     public function render()
     {

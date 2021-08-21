@@ -20,7 +20,7 @@ class FrontendEnvironment implements SingletonInterface
     /**
      * Initializes the TSFE for a given page ID and language.
      *
-     * @param $pageId
+     * @param int $pageId
      * @param int $language
      *
      * @throws SiteNotFoundException

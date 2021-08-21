@@ -11,8 +11,6 @@ interface CacheInterface
      * will be created and read from.
      *
      * @param string $path A relative path of the server
-     *
-     * @return void
      */
     public function setPath($path);
 
@@ -21,8 +19,6 @@ interface CacheInterface
      *
      * @param string $identifier Optional. If given, it'll used the defined $this->path and appends the provided $identifier string additionally.
      *                           Must not start with a '/' (slash).
-     *
-     * @return void
      */
     public function getPath(string $identifier = '');
 
@@ -31,15 +27,11 @@ interface CacheInterface
      * Could be anything, e.g. '.html' or '.json' etc.
      *
      * @param string $fileExtension The file-extension passed as string and without a '.' (dot) - just the extension itself in lowercase.
-     *
-     * @return void
      */
     public function setFileExtension($fileExtension);
 
     /**
      * Retrieves the file-extension of this cache service.
-     *
-     * @return void
      */
     public function getFileExtension();
 
@@ -47,7 +39,7 @@ interface CacheInterface
      * Retrieves a cached file by its identifier.
      *
      * @param string        $identifier        Name of cached file without file-extension
-     * @param \Closure|null $notCachedCallback Optional. If provided, this closure will be called
+     * @param null|\Closure $notCachedCallback Optional. If provided, this closure will be called
      *                                         in case there's no cached file found by the given identifier,
      *                                         which will then cache it immediately by the returned data.
      *
@@ -70,8 +62,6 @@ interface CacheInterface
      * Deletes a cache by its identifier.
      *
      * @param string $identifier The identifier used to be deleted
-     *
-     * @return void
      */
     public function remove(string $identifier);
 }

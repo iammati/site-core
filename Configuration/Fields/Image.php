@@ -2,10 +2,13 @@
 
 use Site\Core\Utility\ExceptionUtility;
 use Site\Core\Utility\FieldUtility;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Resource\File;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
-$fieldName = $config['fieldConfig']['fieldName'] ?? ExceptionUtility::throw('The field "File" requires a configured "fieldName"-fieldConfig value.');
+$fieldName = $config['fieldConfig']['fieldName'] ?? ExceptionUtility::throw(
+    'The field "Image" requires a configured "fieldName"-fieldConfig value.',
+    1628330060
+);
 
 $minItems = $config['fieldConfig']['minItems'] ?? 0;
 $maxItems = $config['fieldConfig']['maxItems'] ?? 1;
@@ -17,13 +20,11 @@ $fileExtensions = $config['fieldConfig']['fileExtensions'] ??
     )
 ;
 
-unset($config['fieldConfig']['fieldName']);
-unset($config['fieldConfig']['minItems']);
-unset($config['fieldConfig']['maxItems']);
+unset($config['fieldConfig']['fieldName'], $config['fieldConfig']['minItems'], $config['fieldConfig']['maxItems']);
 
 $cropVariants = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['TCA_SERVICE']['cropVariants']['default'];
 
-if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['TCA_SERVICE']['cropVariants'][$fieldName] !== null) {
+if (null !== $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['TCA_SERVICE']['cropVariants'][$fieldName]) {
     $cropVariants = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['TCA_SERVICE']['cropVariants'][$fieldName];
 }
 
@@ -33,7 +34,6 @@ return FieldUtility::createByConfig([
 
     'config' => ExtensionManagementUtility::getFileFieldTCAConfig(
         $fieldName,
-
         [
             'minitems' => $minItems,
             'maxitems' => $maxItems,
@@ -105,7 +105,6 @@ return FieldUtility::createByConfig([
                 ],
             ],
         ],
-
         $fileExtensions
     ),
 ], $config);

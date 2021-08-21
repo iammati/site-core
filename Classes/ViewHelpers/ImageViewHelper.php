@@ -29,8 +29,6 @@ class ImageViewHelper extends AbstractTagBasedViewHelper
 
     /**
      * Initialize arguments.
-     *
-     * @return void
      */
     public function initializeArguments()
     {
@@ -65,23 +63,23 @@ class ImageViewHelper extends AbstractTagBasedViewHelper
      *
      * @see https://docs.typo3.org/typo3cms/TyposcriptReference/ContentObjects/Image/
      *
-     * @return string Rendered tag
-     *
      * @throws Exception
+     *
+     * @return string Rendered tag
      */
     public function render()
     {
         $src = (string) $this->arguments['src'];
 
         if (
-            ($src === '' && $this->arguments['image'] === null) ||
-            ($src !== '' && $this->arguments['image'] !== null)
+            ('' === $src && null === $this->arguments['image'])
+            || ('' !== $src && null !== $this->arguments['image'])
         ) {
             throw new Exception('You must either specify a string src or a File object.', 1382284106);
         }
 
         // A URL was given as src, this is kept as is, and we can only scale
-        if ($src !== '' && preg_match('/^(https?:)?\/\//', $src)) {
+        if ('' !== $src && preg_match('/^(https?:)?\/\//', $src)) {
             $this->tag->addAttribute('src', $src);
 
             if (isset($this->arguments['width'])) {
@@ -97,9 +95,9 @@ class ImageViewHelper extends AbstractTagBasedViewHelper
                 $cropString = $this->arguments['crop'];
 
                 if (
-                    $cropString === null &&
-                    $image->hasProperty('crop') &&
-                    $image->getProperty('crop')
+                    null === $cropString
+                    && $image->hasProperty('crop')
+                    && $image->getProperty('crop')
                 ) {
                     $cropString = $image->getProperty('crop');
                 }
@@ -142,7 +140,7 @@ class ImageViewHelper extends AbstractTagBasedViewHelper
                     $this->tag->addAttribute('alt', $image->hasProperty('alternative') ? $image->getProperty('alternative') : '');
                 }
                 $title = $image->hasProperty('title') ? $image->getProperty('title') : '';
-                if (empty($this->arguments['title']) && $title !== '') {
+                if (empty($this->arguments['title']) && '' !== $title) {
                     $this->tag->addAttribute('title', $title);
                 }
             } catch (ResourceDoesNotExistException $e) {

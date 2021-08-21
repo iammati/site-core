@@ -36,8 +36,7 @@ class ModelService
             }
 
             $newModelFile = fopen($modelPath, 'w')
-                or
-            $flashUtility->message('Core (EXT:'.env('CORE_EXT').') - Model Service', 'Couldn\'t create file - permissions?', 2);
+            or $flashUtility->message('Core (EXT:'.env('CORE_EXT').') - Model Service', 'Couldn\'t create file - permissions?', 2);
 
             $content = self::updateContent($extKey, $templateContent, $namespace, $modelName, $properties);
             fwrite($newModelFile, $content);
@@ -59,10 +58,10 @@ class ModelService
             foreach ($propertyDatas as $property => $value) {
                 $dataContent .= "
     /**
-     * @var $varType
+     * @var {$varType}
      */
-    protected $".$property." = ".$value.";
-    ";
+    protected $".$property.' = '.$value.';
+    ';
             }
         }
 
@@ -72,32 +71,31 @@ class ModelService
             foreach ($propertyDatas as $property => $value) {
                 ++$i;
 
-                $setterGetter = "
-    public function set".ucfirst($property)."(\$$property)
+                $setterGetter = '
+    public function set'.ucfirst($property)."(\${$property})
     {
-        \$this->$property = $$property;
+        \$this->{$property} = \${$property};
     }
 
     public function get".ucfirst($property)."()
     {
-        return \$this->$property;
+        return \$this->{$property};
     }";
                 if ($i === count($propertyDatas)) {
-                    $setterGetter = "\n" . $setterGetter;
+                    $setterGetter = "\n".$setterGetter;
                 }
 
                 $dataContent .= $setterGetter;
             }
         }
 
-        if ($modelName == 'Ttcontent') {
+        if ('Ttcontent' == $modelName) {
             $content = str_replace('\TYPO3\CMS\Extbase\DomainObject\AbstractEntity', '\Site\SiteBackend\Domain\Model\BaseTtcontent', $content);
         }
 
         $dataContent = str_replace('$ ', '', $dataContent);
         $dataContent = str_replace('$ this', '$this', $dataContent);
-        $content = str_replace('{CLASS_CONTENT}', $dataContent, $content);
 
-        return $content;
+        return str_replace('{CLASS_CONTENT}', $dataContent, $content);
     }
 }

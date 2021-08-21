@@ -14,7 +14,7 @@ class Field
 
     /**
      * @param string $fieldIdentifier The identifier of a field e.g. 'Input'.
-     * @param array  $config          A TCA field-configuration.
+     * @param array  $config          a TCA field-configuration
      */
     public static function create(string $fieldIdentifier, array $config): array
     {
@@ -43,7 +43,7 @@ class Field
             }
         }
 
-        if ($fieldConfigFile === null) {
+        if (null === $fieldConfigFile) {
             ExceptionUtility::throw(
                 sprintf(
                     'Field - Could not create field of identifier-type: "%s"'.

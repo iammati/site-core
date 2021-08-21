@@ -13,8 +13,6 @@ class RTEService
      * @param string $extKey       The name of the extension where the YAML file is defined - e.g. 'site_backend'.
      * @param string $yamlFileName the name of the targeted YAML file to be registered
      * @param string $identifier   Optional. Default value of the identifier is 'default'.
-     *
-     * @return void
      */
     public static function register(string $extKey, string $yamlFileName, string $identifier = 'default')
     {
