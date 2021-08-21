@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use RuntimeException;
 use Site\Core\Service\AjaxService;
 use Site\Core\Utility\StrUtility;
 use TYPO3\CMS\Core\Http\HtmlResponse;
@@ -76,10 +77,19 @@ class AjaxMiddleware implements MiddlewareInterface
             $classInstance->setServerRequest($request);
             $classInstance->setRequestHandler($handler);
 
-            return new HtmlResponse($classInstance->{$method}([
-                'post' => $postParams,
-                'query' => $queryParams,
-            ]));
+            try {
+                return new HtmlResponse($classInstance->{$method}([
+                    'post' => $postParams,
+                    'query' => $queryParams,
+                ]));
+            } catch (RuntimeException $e) {
+                if ($e->getMessage() == 'Error writing to stream' && $e->getCode() == 1436717291) {
+                    return $classInstance->{$method}([
+                        'post' => $postParams,
+                        'query' => $queryParams,
+                    ]);
+                }
+            }
         }
 
         return $handler->handle($request);
