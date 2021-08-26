@@ -4,6 +4,7 @@
     "description": "Core Extension for a TYPO3 Application.",
     "license": "GPL-2.0-or-later",
     "minimum-stability": "stable",
+    "version": "2.2.1",
     "authors": [
         {
             "name": "Mati",
