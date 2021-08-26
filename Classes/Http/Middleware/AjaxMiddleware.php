@@ -42,28 +42,34 @@ class AjaxMiddleware implements MiddlewareInterface
             $path = str_replace('/ajax/', '', $request->getUri()->getPath());
 
             if (StrUtility::endsWith($path, '/')) {
-                $path = substr($path, 0, -1);
+                $path = mb_substr($path, 0, -1);
             }
 
-            $ajaxId = $queryParams['vendor'] . '/' . $queryParams['ajax'];
+            $ajaxId = $queryParams['vendor'].'/'.$queryParams['ajax'];
 
             $method = 'process';
 
             $thisAjaxCfg = false;
-            $ajaxConfigs = GeneralUtility::makeInstance(AjaxService::class)->findByIdentifier('site_page');
+            $ajaxConfigIdentifiers = GeneralUtility::makeInstance(AjaxService::class)->findAll();
 
-            foreach ($ajaxConfigs as $key => $cfg) {
-                if (StrUtility::contains($key, '-')) {
-                    $splittedKey = explode('-', explode('/', $key)[1]);
+            foreach ($ajaxConfigIdentifiers as $identifier => $ajaxConfigs) {
+                foreach ($ajaxConfigs as $key => $cfg) {
+                    if (StrUtility::contains($key, '-')) {
+                        $splittedKey = explode('-', explode('/', $key)[1]);
 
-                    if (explode('-', $queryParams['ajax'])[0] == $splittedKey[0] && '*' == $splittedKey[1]) {
-                        if ($cfg['overwriteDynamicMethod']) {
-                            $method = $cfg['overwriteDynamicMethod'];
-                        } else {
-                            $method = (!empty(explode('-', $queryParams['ajax'])[1]) ? explode('-', $queryParams['ajax'])[1] : 'process');
+                        if (explode('-', $queryParams['ajax'])[0] == $splittedKey[0] && '*' == $splittedKey[1]) {
+                            if ($cfg['overwriteDynamicMethod']) {
+                                $method = $cfg['overwriteDynamicMethod'];
+                            } else {
+                                $method = (!empty(explode('-', $queryParams['ajax'])[1]) ? explode('-', $queryParams['ajax'])[1] : 'process');
+                            }
+
+                            $thisAjaxCfg = $cfg;
                         }
-
-                        $thisAjaxCfg = $cfg;
+                    } else {
+                        if ($ajaxId === $key) {
+                            $thisAjaxCfg = $cfg;
+                        }
                     }
                 }
             }

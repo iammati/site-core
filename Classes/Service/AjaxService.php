@@ -21,25 +21,23 @@ class AjaxService
     /**
      * Registers an AJAX-configuration with a custom identifier.
      * Optionally also overrides if the third parameter ($override) is set to true.
-     *
-     * @return void
      */
-    public function register(string $identifier, array $config, bool $override = false)
+    public function register(string $identifier, array $config, bool $override = false): bool
     {
         if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['AJAX'][$identifier]) && !$override) {
             return false;
         }
 
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['AJAX'][$identifier] = $config;
+
+        return true;
     }
 
     /**
      * Finder which returns, if present, the AJAX-configuration by its identifier.
      * If not found it returns by default null.
-     *
-     * @return void
      */
-    public function findByIdentifier(string $identifier)
+    public function findByIdentifier(string $identifier): ?array
     {
         $config = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['AJAX'][$identifier];
 
@@ -48,10 +46,8 @@ class AjaxService
 
     /**
      * Finder which returns all AJAX-configurations.
-     *
-     * @return array
      */
-    public function findAll()
+    public function findAll(): array
     {
         return $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['AJAX'];
     }
