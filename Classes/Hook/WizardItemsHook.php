@@ -19,6 +19,8 @@ class WizardItemsHook implements NewContentElementWizardHookInterface
 {
     public function manipulateWizardItems(&$wizardItems, &$parentObject)
     {
+        $txContainerParent = (int)$_GET['tx_container_parent'] ?? null;
+
         $customerProject = env('CUSTOMER_PROJECT');
         $backendExt = env('BACKEND_EXT');
 
@@ -48,6 +50,11 @@ class WizardItemsHook implements NewContentElementWizardHookInterface
 
                     'params' => '&defVals[tt_content][CType]='.$CType,
                 ];
+
+                if ($txContainerParent !== null) {
+                    $elementConfiguration['tt_content_defValues']['tx_container_parent'] = $txContainerParent;
+                    $elementConfiguration['params'] .= '&defVals[tt_content][tx_container_parent]=' . $txContainerParent;
+                }
 
                 $customWizardItems['CustomElements_'.$CType] = $elementConfiguration;
             }
