@@ -8,6 +8,6 @@ return FieldUtility::createByConfig([
 
     'config' => [
         'type' => 'input',
-        'renderType' => 'datetime',
+        'renderType' => 'inputDateTime',
     ],
 ], $config);
