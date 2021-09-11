@@ -20,7 +20,7 @@ if (!function_exists('ll')) {
      *
      * @throws Exception
      */
-    function ll(string $extKey, string $locallangLabel, string $langCode = ''): mixed
+    function ll(string $extKey, string $locallangLabel, string $langCode = ''): string
     {
         if (serverRequest()->getUri() === null) {
             return '';
