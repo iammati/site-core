@@ -3,7 +3,7 @@
     "type": "typo3-cms-extension",
     "description": "Core Extension for a TYPO3 Application.",
     "license": "GPL-2.0-or-later",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "minimum-stability": "stable",
     "authors": [
         {
@@ -13,7 +13,7 @@
         }
     ],
     "require": {
-        "typo3/cms-core": "^11.3",
+        "typo3/cms-core": "^11.4",
         "b13/container": "*",
         "symfony/dotenv": "*"
     },
