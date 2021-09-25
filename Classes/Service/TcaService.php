@@ -178,10 +178,10 @@ class TcaService
     /**
      * Adds the content elements (inside BE as CType) to the select dropdown.
      *
-     * @param string $itemGroupIdentifier Default is 'customelements'. The identifier of the itemGroup to add the select-items.
      * @param array  $CTypes              E.g. ['Header Teaser Image' => ce_headerteaserimage].
+     * @param string $itemGroupIdentifier Default is 'customelements'. The identifier of the itemGroup to add the select-items.
      */
-    public static function addSelectItems(string $itemGroupIdentifier = 'customelements', array $CTypes)
+    public static function addSelectItems(array $CTypes, string $itemGroupIdentifier = 'customelements')
     {
         foreach ($CTypes as $key => $CType) {
             ExtensionManagementUtility::addTcaSelectItem(
@@ -481,7 +481,7 @@ class TcaService
     public static function loadCEs(string $dir, string $itemGroupIdentifier = 'customelements')
     {
         $CTypes = self::fetchCEs($dir);
-        TcaService::addSelectItems($itemGroupIdentifier, $CTypes);
+        TcaService::addSelectItems($CTypes, $itemGroupIdentifier);
 
         foreach ($CTypes as $label => $CType) {
             $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['TCA_SERVICE']['loadedCEs'][$CType] = true;

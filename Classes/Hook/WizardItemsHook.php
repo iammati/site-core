@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Site\Core\Hook;
 
 use Site\Core\Service\TcaService;
+use TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController;
 use TYPO3\CMS\Backend\Wizard\NewContentElementWizardHookInterface;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Package\PackageManager;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * This Hook-Listener for the WizardItems
@@ -17,18 +20,32 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
  */
 class WizardItemsHook implements NewContentElementWizardHookInterface
 {
+    protected PackageManager $packageManager;
+
+    public function __construct()
+    {
+        $this->packageManager = GeneralUtility::makeInstance(PackageManager::class);
+    }
+
+    /**
+     * @param array $wizardItems
+     * @param NewContentElementController $wizardItems
+     */
     public function manipulateWizardItems(&$wizardItems, &$parentObject)
     {
         $txContainerParent = (int)$_GET['tx_container_parent'] ?? null;
-
         $backendExt = env('BACKEND_EXT');
+        
+        if (!$this->packageManager->isPackageActive($backendExt)) {
+            return $wizardItems;
+        }
 
         $path = ExtensionManagementUtility::extPath($backendExt, 'Configuration/TCA/Overrides/');
         $CTypes = TcaService::fetchCEs($path, false);
 
         $customWizardItems = [];
 
-        if (0 !== sizeof($CTypes)) {
+        if (count($CTypes) !== 0) {
             foreach ($CTypes as $CType) {
                 $ctypeName = explode('_', $CType)[1];
 

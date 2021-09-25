@@ -16,9 +16,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class ButtonBarHook
 {
-    /**
-     * @throws \Exception
-     */
     public function loadRequireJsModule(array $params): array
     {
         $isDisabled = $GLOBALS['BE_USER']->uc['disableSaveShortcut'] ?? false;
@@ -27,11 +24,11 @@ class ButtonBarHook
             /** @var PageRenderer */
             $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
 
-            $publicJsPath = '../typo3conf/ext/'.env('CORE_EXT').'/Resources/Public/JavaScript';
+            $path = '/typo3conf/ext/'.env('CORE_EXT').'/Resources/Public/JavaScript';
 
-            $pageRenderer->loadRequireJsModule($publicJsPath.'/SaveShortcut.js');
-            $pageRenderer->loadRequireJsModule($publicJsPath.'/CloseShortcut.js');
-            $pageRenderer->loadRequireJsModule($publicJsPath.'/ReloadShortcut.js');
+            $pageRenderer->loadRequireJsModule("{$path}/SaveShortcut.js");
+            $pageRenderer->loadRequireJsModule("{$path}/CloseShortcut.js");
+            $pageRenderer->loadRequireJsModule("{$path}/ReloadShortcut.js");
         }
 
         return $params['buttons'];

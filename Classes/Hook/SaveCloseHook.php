@@ -7,6 +7,7 @@ namespace Site\Core\Hook;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\Components\Buttons\InputButton;
 use TYPO3\CMS\Core\Imaging;
+use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -23,8 +24,6 @@ class SaveCloseHook
     public function addButton(array $params, mixed &$buttonBar): array
     {
         $buttons = $params['buttons'];
-
-        return $buttons;
         $saveButton = $buttons[ButtonBar::BUTTON_POSITION_LEFT][2][0];
 
         if ($saveButton instanceof InputButton) {
@@ -45,10 +44,7 @@ class SaveCloseHook
         return $buttons;
     }
 
-    /**
-     * @return LanguageService
-     */
-    protected function getLanguageService()
+    protected function getLanguageService(): LanguageService
     {
         return $GLOBALS['LANG'];
     }

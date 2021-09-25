@@ -20,7 +20,7 @@ if (!function_exists('ll')) {
      *
      * @throws Exception
      */
-    function ll(string $extKey, string $locallangLabel, string $langCode = ''): string
+    function ll(string $extKey, string $locallangLabel, string $langCode = '')
     {
         if (serverRequest()->getUri() === null) {
             return '';
@@ -61,7 +61,7 @@ if (!function_exists('serverRequest')) {
     /** Helper to easier get the current HTTP server request. */
     function serverRequest(): ServerRequest
     {
-        return $GLOBALS['TYPO3_REQUEST'] ?: GeneralUtility::makeInstance(ServerRequest::class);
+        return $GLOBALS['TYPO3_REQUEST'] ?? GeneralUtility::makeInstance(ServerRequest::class);
     }
 }
 
