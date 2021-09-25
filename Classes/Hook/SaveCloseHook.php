@@ -24,6 +24,11 @@ class SaveCloseHook
     public function addButton($params, &$buttonBar): array
     {
         $buttons = $params['buttons'];
+
+        if (!isset($buttons[ButtonBar::BUTTON_POSITION_LEFT][2])) {
+            return $buttons;
+        }
+
         $saveButton = $buttons[ButtonBar::BUTTON_POSITION_LEFT][2][0];
 
         if ($saveButton instanceof InputButton) {

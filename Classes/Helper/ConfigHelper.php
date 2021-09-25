@@ -35,7 +35,7 @@ class ConfigHelper
                 $keys = GeneralUtility::trimExplode('.', $cfgKey);
 
                 foreach ($keys as $key) {
-                    $cfg = $cfg[$key];
+                    $cfg = $cfg[$key] ?? '';
                 }
 
                 return $cfg;

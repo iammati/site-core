@@ -24,7 +24,10 @@ unset($config['fieldConfig']['fieldName'], $config['fieldConfig']['minItems'], $
 
 $cropVariants = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['TCA_SERVICE']['cropVariants']['default'];
 
-if (null !== $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['TCA_SERVICE']['cropVariants'][$fieldName]) {
+if (
+    isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['TCA_SERVICE']['cropVariants'][$fieldName]) &&
+    null !== $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['TCA_SERVICE']['cropVariants'][$fieldName]
+) {
     $cropVariants = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['TCA_SERVICE']['cropVariants'][$fieldName];
 }
 
@@ -55,7 +58,7 @@ return FieldUtility::createByConfig([
                     'config' => [
                         'appearance' => [
                             'elementBrowserType' => 'file',
-                            'elementBrowserAllowed' => $allowedFileTypes,
+                            'elementBrowserAllowed' => $fileExtensions,
                         ],
                     ],
                 ],
