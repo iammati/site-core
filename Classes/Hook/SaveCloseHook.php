@@ -21,7 +21,7 @@ class SaveCloseHook
     /**
      * Adds the "save and close"-button to TYPO3's doktype-header.
      */
-    public function addButton(array $params, mixed &$buttonBar): array
+    public function addButton($params, &$buttonBar): array
     {
         $buttons = $params['buttons'];
         $saveButton = $buttons[ButtonBar::BUTTON_POSITION_LEFT][2][0];
