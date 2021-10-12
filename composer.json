@@ -3,7 +3,7 @@
     "type": "typo3-cms-extension",
     "description": "Core Extension for a TYPO3 Application.",
     "license": "GPL-2.0-or-later",
-    "version": "3.0.8",
+    "version": "3.1.0",
     "minimum-stability": "stable",
     "authors": [
         {
@@ -15,7 +15,8 @@
     "require": {
         "typo3/cms-core": "^11.4",
         "b13/container": "*",
-        "symfony/dotenv": "*"
+        "symfony/dotenv": "*",
+        "dflydev/dot-access-data": "^3.0"
     },
     "autoload": {
         "psr-4": {

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Site\Core\Service;
 
+use Dflydev\DotAccessData\Data;
+use Exception;
 use Site\Core\Helper\ConfigHelper;
 use Site\Core\Utility\ExceptionUtility;
 use Site\Core\Utility\StrUtility;
@@ -133,7 +135,7 @@ class LocalizationService
      *
      * @throws ExceptionUtility
      */
-    public function findByKey(string $extKey, string $key, string $twoLetterIsoCode = ''): mixed
+    public function findByKey(string $extKey, string $key, string $twoLetterIsoCode = '')
     {
         $backendExt = env('BACKEND_EXT') ?: 'BACKEND_EXT';
         $localizationType = strtolower(ConfigHelper::get($backendExt, 'localizationType') ?? 'custom');
@@ -153,42 +155,69 @@ class LocalizationService
                 $language = $twoLetterIsoCode ?: $this->getLanguage();
 
                 if (!isset($this->getLocalizationService()[$extKey])) {
-                    $localizedStr = 'EXT:'.$extKey.' has not been configured yet for the LocalizationService!';
+                    throw new Exception(
+                        sprintf(
+                            'EXT:%s has not been configured for the LocalizationService yet!',
+                            $extKey
+                        ),
+                        1633874558
+                    );
                 } else {
                     $config = $this->getLocalizationService()[$extKey];
                     $localizations = $config['localizations'];
+                    $translations = $localizations[$language];
 
-                    if (StrUtility::contains($key, '.') || StrUtility::contains($key, ':')) {
-                        $explodedKey = explode('.', $key);
-                        $implodedKey = implode('/', $explodedKey);
+                    if (!isset($translations)) {
+                        throw new Exception(
+                            sprintf(
+                                'LocalizationService: There is no localization for the language %s',
+                                $language
+                            ),
+                            1633874564
+                        );
+                    }
 
-                        $explodedPathLabel = explode(':', $implodedKey);
+                    if (!str_contains($key, ':')) {
+                        throw new Exception(
+                            sprintf(
+                                'LocalizationService: The provided key "%s" does not contain a colon which is required to resolve a path and a key to a translated label!',
+                                $key
+                            )
+                        );
+                    }
 
+                    [$path, $fileKey] = explode(':', $key);
+                    $path = str_replace('.', '/', $path);
+
+                    foreach ($config['definitions'] as $definition) {
                         $extPath = ExtensionManagementUtility::extPath($extKey);
+                        $path = "{$extPath}{$definition}{$language}/{$path}.php";
 
-                        foreach ($config['definitions'] as $definition) {
-                            $path = $extPath.$definition.$language.'/'.$explodedPathLabel[0].'.php';
-
-                            if (!file_exists($path)) {
-                                ExceptionUtility::throw(
-                                    'LocalizationService: The "'.$path.'" localization-file does not exists!',
-                                    1628704798
-                                );
-                            }
-
-                            $locallizedArr = include $path;
-                            $locallizedKey = $locallizedArr[$explodedPathLabel[1]];
-
-                            if (isset($locallizedKey)) {
-                                $localizedStr = $locallizedKey;
-                            }
+                        if (!file_exists($path)) {
+                            throw new Exception(
+                                sprintf(
+                                    'LocalizationService: The %s localization-file does not exists!',
+                                    $path
+                                ),
+                                1628704798
+                            );
                         }
-                    } else {
-                        if (isset($localizations[$language][$key])) {
-                            $localizedStr = $localizations[$language][$key];
-                        } else {
-                            ExceptionUtility::throw('LocalizationService: The "'.$extKey.'" localizations does not contain a key for "'.$key.'" for language "'.$language.'".');
+
+                        $translationsFromPath = include $path;
+                        $data = new Data($translationsFromPath);
+
+                        if (!$data->has($fileKey)) {
+                            throw new Exception(
+                                sprintf(
+                                    'LocalizationService: Translations of file "%s" does not contain the key "%s"',
+                                    $path,
+                                    $fileKey
+                                ),
+                                1633885827
+                            );
                         }
+
+                        $localizedStr = $data->get($fileKey);
                     }
                 }
 
@@ -232,7 +261,8 @@ class LocalizationService
     {
         $lang = 'en';
 
-        if (ApplicationType::fromRequest(serverRequest())->isBackend()) {
+        // if (ApplicationType::fromRequest(serverRequest())->isBackend()) {
+        if (TYPO3_REQUESTTYPE_BE) {
             $uc = unserialize($this->getBEUser()->user['uc'] ?? '');
             $lang = $uc['lang'] ?: 'en';
 

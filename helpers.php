@@ -14,23 +14,19 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 if (!function_exists('ll')) {
     /**
-     * @param string $extKey           The extension-key
-     * @param string $locallangLabel   The label to be locallized
-     * @param string $twoLetterIsoCode The twoLetterIsoCode e.g. 'de' or 'en'
-     *
      * @throws Exception
      */
-    function ll(string $extKey, string $locallangLabel, string $langCode = '')
+    function ll(string $extKey, string $locallangLabel, string $twoLetterIsoCode = '')
     {
-        if (serverRequest()->getUri() === null) {
-            return '';
-        }
+        // if (serverRequest()->getUri() === null) {
+        //     return '';
+        // }
 
         /** @var LocalizationService $localizationService */
         $localizationService = GeneralUtility::makeInstance(LocalizationService::class);
 
         if ($localizationService->has($extKey)) {
-            return $localizationService->findByKey($extKey, $locallangLabel, $langCode);
+            return $localizationService->findByKey($extKey, $locallangLabel, $twoLetterIsoCode);
         }
 
         ExceptionUtility::throw(
@@ -58,7 +54,9 @@ if (!function_exists('env')) {
 }
 
 if (!function_exists('serverRequest')) {
-    /** Helper to easier get the current HTTP server request. */
+    /**
+     * Helper to easier get the current HTTP server request from TYPO3.
+     */
     function serverRequest(): ServerRequest
     {
         return $GLOBALS['TYPO3_REQUEST'] ?? GeneralUtility::makeInstance(ServerRequest::class);
@@ -77,6 +75,9 @@ if (!function_exists('frontend')) {
 }
 
 if (!function_exists('ed')) {
+    /**
+     * Extbase debugger shorthand.
+     */
     function ed(mixed ...$args)
     {
         \TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump(...$args);
@@ -84,6 +85,9 @@ if (!function_exists('ed')) {
 }
 
 if (!function_exists('edd')) {
+    /**
+     * Extbase debugger shorthand with die.
+     */
     function edd(mixed ...$args): void
     {
         ed($args);
@@ -93,12 +97,15 @@ if (!function_exists('edd')) {
 }
 
 if (!function_exists('renderView')) {
+    /**
+     * StandaloneView shorthand depending on TYPO3-Fluid
+     * instead of TYPO3's core StandaloneView.
+     */
     function renderView(array $rootPaths, string $templatePath, array $data = []): string
     {
         $view = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(Site\Core\View\FluidStandaloneView::class)->create($rootPaths);
 
         $view->getTemplatePaths()->setTemplatePathAndFilename(
-            // \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName('EXT:site_core/Resources/Private/Error/Templates/'.$templateName.'.html')
             \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($templatePath)
         );
 

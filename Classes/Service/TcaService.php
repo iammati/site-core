@@ -10,15 +10,15 @@ use Site\Core\Utility\ExceptionUtility;
 use Site\Core\Utility\FileUtility;
 use Site\Core\Utility\FlashUtility;
 use Site\Core\Utility\StrUtility;
-// use Site\Core\Configuration\Event\AfterCeDefaultTcaRetrievedEvent;
+use Site\Core\Configuration\Event\AfterCeDefaultTcaRetrievedEvent;
+use Symfony\Component\DependencyInjection\Container as DependencyInjectionContainer;
 use Symfony\Component\Finder\Finder;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-
-// use TYPO3\CMS\Extbase\Object\Container\Container;
+use TYPO3\CMS\Extbase\Object\Container\Container;
 
 /**
  * The TcaService provides useful methods and an effective way
@@ -218,11 +218,12 @@ class TcaService
             $fields = $fields.$additionalFields;
         }
 
+        $tabName = 'Content Element';
+
         $defaultShowitem = '
-            --div--;Content Element,
-                ctypeNameField,'.
-                $fields.
-                'parentid,'.
+            --div--;{tabName},
+                {fields},
+                parentid,'.
             '
             --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
                 --palette--;;general,
@@ -242,10 +243,22 @@ class TcaService
             --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended
         ';
 
-        // self::$eventDispatcher = GeneralUtility::makeInstance(Container::class)->getInstance(EventDispatcherInterface::class);
-        // $showitem = static::$eventDispatcher->dispatch(new AfterCeDefaultTcaRetrievedEvent($defaultShowitem))->getShowitem();
+        self::$eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
 
-        $GLOBALS['TCA']['tt_content']['types'][$CType]['showitem'] = $defaultShowitem;
+        $event = new AfterCeDefaultTcaRetrievedEvent();
+        $event
+            ->setCType($CType)
+            ->setShowitem($defaultShowitem)
+            ->setFields($fields)
+            ->setTabName($tabName)
+        ;
+
+        $showitem = static::$eventDispatcher->dispatch($event)->getShowitem();
+
+        $showitem = str_replace('{tabName}', $event->getTabName(), $showitem);
+        $showitem = str_replace('{fields}', $event->getFields(), $showitem);
+
+        $GLOBALS['TCA']['tt_content']['types'][$CType]['showitem'] = $showitem;
     }
 
     /**

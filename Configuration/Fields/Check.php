@@ -8,10 +8,11 @@ return FieldUtility::createByConfig([
 
     'config' => [
         'type' => 'check',
+        'renderType' => 'checkboxToggle',
         'default' => 0,
 
         'items' => [
-            0 => ['', ''],
+            ['', ''],
         ],
     ],
 ], $config);
