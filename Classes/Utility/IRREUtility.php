@@ -44,12 +44,12 @@ class IRREUtility
      *
      * @param int|string $parentid   the value used to compare using $fieldName-parameter
      * @param string     $tableName  the table name for the where-condition
-     * @param string     $fieldName  the column name for the where-condition
+     * @param string     $fieldName  the column name for the where-condition (default should be 'parentid')
      * @param mixed      $repository
      *
      * @return \Doctrine\DBAL\Driver\Statement
      */
-    public static function resolveByRepository($parentid, $tableName, $fieldName = 'parentid', $repository)
+    public static function resolveByRepository($parentid, $tableName, $fieldName, $repository)
     {
         $pid = $GLOBALS['TSFE']->id;
 
