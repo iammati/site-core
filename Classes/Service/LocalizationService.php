@@ -250,7 +250,7 @@ class LocalizationService
 
     protected function getBEUser()
     {
-        if (null === $GLOBALS['BE_USER']) {
+        if (!isset($GLOBALS['BE_USER']) || $GLOBALS['BE_USER'] === null) {
             Bootstrap::initializeBackendUser();
         }
 
