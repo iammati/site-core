@@ -65,6 +65,10 @@ class AjaxMiddleware implements MiddlewareInterface
                             }
 
                             $thisAjaxCfg = $cfg;
+                        }  else {
+                            if ($ajaxId === $key) {
+                                $thisAjaxCfg = $cfg;
+                            }
                         }
                     } else {
                         if ($ajaxId === $key) {
