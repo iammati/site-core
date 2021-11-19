@@ -137,6 +137,10 @@ class LocalizationService
      */
     public function findByKey(string $extKey, string $key, string $twoLetterIsoCode = '')
     {
+        if (PHP_SAPI === 'cli') {
+            return;
+        }
+
         $backendExt = env('BACKEND_EXT') ?: 'BACKEND_EXT';
         $localizationType = strtolower(ConfigHelper::get($backendExt, 'localizationType') ?? 'custom');
 
@@ -261,9 +265,9 @@ class LocalizationService
     {
         $lang = 'en';
 
-        // if (ApplicationType::fromRequest(serverRequest())->isBackend()) {
-        if (TYPO3_REQUESTTYPE_BE) {
-            $uc = unserialize($this->getBEUser()->user['uc'] ?? '');
+        if (($GLOBALS['TYPO3_REQUEST'] ?? null) instanceof ServerRequestInterface
+            && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend()
+        ) {            $uc = unserialize($this->getBEUser()->user['uc'] ?? '');
             $lang = $uc['lang'] ?: 'en';
 
             if ($lang == 'default') {
