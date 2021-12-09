@@ -8,10 +8,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use RuntimeException;
 use Site\Core\Service\AjaxService;
 use Site\Core\Utility\StrUtility;
-use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -54,11 +52,11 @@ class AjaxMiddleware implements MiddlewareInterface
 
             foreach ($ajaxConfigIdentifiers as $identifier => $ajaxConfigs) {
                 foreach ($ajaxConfigs as $key => $cfg) {
-                    if (StrUtility::contains($key, '-')) {
+                    if (str_contains($key, '-')) {
                         $splittedKey = explode('-', explode('/', $key)[1]);
 
                         if (explode('-', $queryParams['ajax'])[0] == $splittedKey[0] && '*' == $splittedKey[1]) {
-                            if ($cfg['overwriteDynamicMethod']) {
+                            if (isset($cfg['overwriteDynamicMethod']) && $cfg['overwriteDynamicMethod']) {
                                 $method = $cfg['overwriteDynamicMethod'];
                             } else {
                                 $method = (!empty(explode('-', $queryParams['ajax'])[1]) ? explode('-', $queryParams['ajax'])[1] : 'process');
@@ -83,19 +81,10 @@ class AjaxMiddleware implements MiddlewareInterface
             $classInstance->setServerRequest($request);
             $classInstance->setRequestHandler($handler);
 
-            try {
-                return new HtmlResponse($classInstance->{$method}([
-                    'post' => $postParams,
-                    'query' => $queryParams,
-                ]));
-            } catch (RuntimeException $e) {
-                if ($e->getMessage() == 'Error writing to stream' && $e->getCode() == 1436717291) {
-                    return $classInstance->{$method}([
-                        'post' => $postParams,
-                        'query' => $queryParams,
-                    ]);
-                }
-            }
+            return $classInstance->{$method}([
+                'post' => $postParams,
+                'query' => $queryParams,
+            ]);
         }
 
         return $handler->handle($request);
