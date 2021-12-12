@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Site\Core\View;
 
 use Exception;
@@ -10,18 +12,15 @@ use TYPO3Fluid\Fluid\View\TemplateView;
 
 class FluidStandaloneView
 {
-    /**
-     * @param array|string $rootPathsOrTemplatePath
-     *
-     * @return TemplateView
-     */
-    public static function create($rootPathsOrTemplatePath)
+    /** @param array|string $rootPathsOrTemplatePath */
+    public static function create($rootPathsOrTemplatePath, string $controllerName = '', string $actionName = ''): TemplateView
     {
         /** @var TemplateView */
         $view = GeneralUtility::makeInstance(TemplateView::class);
 
         /** @var RenderingContext */
         $renderingContext = GeneralUtility::makeInstance(RenderingContext::class, $view);
+
 
         /** @var TemplatePaths */
         $templatePaths = GeneralUtility::makeInstance(TemplatePaths::class);
@@ -47,6 +46,8 @@ class FluidStandaloneView
         }
 
         $renderingContext->setTemplatePaths($templatePaths);
+        $renderingContext->setControllerName($controllerName);
+        $renderingContext->setControllerAction($actionName);
         $view->setRenderingContext($renderingContext);
 
         return $view;
