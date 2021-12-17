@@ -6,20 +6,15 @@ namespace Site\Core\View;
 
 use Exception;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContext;
-use TYPO3Fluid\Fluid\View\TemplatePaths;
-use TYPO3Fluid\Fluid\View\TemplateView;
+use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Fluid\View\TemplatePaths;
 
-class FluidStandaloneView
+class TYPO3StandaloneView
 {
     /** @param array|string $rootPathsOrTemplatePath */
-    public static function create($rootPathsOrTemplatePath, string $controllerName = '', string $actionName = ''): TemplateView
+    public static function create($rootPathsOrTemplatePath, string $controllerName, string $actionName): StandaloneView
     {
-        /** @var TemplateView */
-        $view = GeneralUtility::makeInstance(TemplateView::class);
-
-        /** @var RenderingContext */
-        $renderingContext = GeneralUtility::makeInstance(RenderingContext::class, $view);
+        $view = new StandaloneView();
 
         /** @var TemplatePaths */
         $templatePaths = GeneralUtility::makeInstance(TemplatePaths::class);
@@ -44,10 +39,9 @@ class FluidStandaloneView
             );
         }
 
-        $renderingContext->setTemplatePaths($templatePaths);
-        $renderingContext->setControllerName($controllerName);
-        $renderingContext->setControllerAction($actionName);
-        $view->setRenderingContext($renderingContext);
+        $view->getRenderingContext()->setTemplatePaths($templatePaths);
+        $view->getRenderingContext()->setControllerName($controllerName);
+        $view->getRenderingContext()->setControllerAction($actionName);
 
         return $view;
     }
