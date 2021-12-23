@@ -102,7 +102,7 @@ class CacheService implements CacheInterface
         );
     }
 
-    public function add(string $identifier, string $content): void
+    public function add(string $identifier, string $content): ?bool
     {
         $identifier = StrUtility::convertUri($identifier);
 
@@ -118,6 +118,8 @@ class CacheService implements CacheInterface
         if (!$filePutContents) {
             new Exception('Fatal. CacheService was not able to create the "'.$cacheFilePath.'"-file.');
         }
+
+        return null;
     }
 
     /**
@@ -129,7 +131,7 @@ class CacheService implements CacheInterface
     {
         $cacheFilePath = $this->getPath($identifier.'.'.$this->getFileExtension());
 
-        if ('*' == $identifier) {
+        if ($identifier === '*') {
             $cachedFiles = glob($cacheFilePath);
 
             foreach ($cachedFiles as $file) {
