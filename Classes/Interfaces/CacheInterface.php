@@ -45,7 +45,7 @@ interface CacheInterface
      *                                         in case there's no cached file found by the given identifier,
      *                                         which will then cache it immediately by the returned data.
      */
-    public function get(string $identifier, ?Closure $notCachedCallback): bool|string;
+    public function get(string $identifier, ?Closure $notCachedCallback = null): bool|string;
 
     /**
      * Adds a new cache into the HTML-Caches file by using its $identifier as filename and $content as of the HTML-content.
