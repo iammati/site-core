@@ -40,12 +40,12 @@ class StrUtility
         // it'll be converted into a '-' (dash).
         // In that case it'll be checked if it starts then with a dash
         // and removes that.
-        if (self::startsWith($haystack, '-')) {
+        if (str_starts_with($haystack, '-')) {
             $haystack = mb_substr($haystack, 1);
         }
 
         // Same as above, just with an endsWith-condition.
-        if (self::endsWith($haystack, '-')) {
+        if (str_ends_with($haystack, '-')) {
             $haystack = mb_substr($haystack, 0, mb_strlen($haystack) - 1);
         }
 
