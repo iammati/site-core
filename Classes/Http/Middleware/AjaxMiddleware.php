@@ -9,7 +9,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Site\Core\Service\AjaxService;
-use Site\Core\Utility\StrUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -18,6 +17,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * to the requested URI.
  *
  * @see \Site\Core\Service\AjaxService::class
+ * @deprecated in v3, will be removed in v4
  */
 class AjaxMiddleware implements MiddlewareInterface
 {
@@ -33,13 +33,13 @@ class AjaxMiddleware implements MiddlewareInterface
         $normalizedParams = $request->getAttribute('normalizedParams');
         $uri = $normalizedParams->getRequestUri();
 
-        if (StrUtility::startsWith($uri, '/ajax')) {
+        if (str_starts_with($uri, '/ajax')) {
             $postParams = $request->getParsedBody();
             $queryParams = $request->getQueryParams();
 
             $path = str_replace('/ajax/', '', $request->getUri()->getPath());
 
-            if (StrUtility::endsWith($path, '/')) {
+            if (str_ends_with($path, '/')) {
                 $path = mb_substr($path, 0, -1);
             }
 

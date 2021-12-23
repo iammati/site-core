@@ -3,19 +3,13 @@
 // To avoid problems using in the CLI the typo3_console composer-package
 // the helper-functions will work in any other request-type except the CLI itself.
 
-use Site\Core\Composer\EnvLoader;
 use Site\Core\Service\LocalizationService;
-use Site\Core\Utility\ExceptionUtility;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
-(new EnvLoader())->postAutoloadDump();
-
 if (!function_exists('ll')) {
-    /**
-     * @throws Exception
-     */
+    /** @throws Exception */
     function ll(string $extKey, string $locallangLabel, string $twoLetterIsoCode = '')
     {
         // if (serverRequest()->getUri() === null) {
@@ -29,7 +23,7 @@ if (!function_exists('ll')) {
             return $localizationService->findByKey($extKey, $locallangLabel, $twoLetterIsoCode);
         }
 
-        ExceptionUtility::throw(
+        new Exception(
             'LocalizationService: The "'.$extKey.'" has not been registered yet thus can\'t access the locallized key for "'.$locallangLabel.'".',
             1628367963
         );

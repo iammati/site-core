@@ -30,8 +30,8 @@ class ConfigHelper
 
         $cfg = require $path;
 
-        if ('' != $cfgKey) {
-            if (StrUtility::contains($cfgKey, '.')) {
+        if ($cfgKey !== '') {
+            if (str_contains($cfgKey, '.')) {
                 $keys = GeneralUtility::trimExplode('.', $cfgKey);
 
                 foreach ($keys as $key) {

@@ -1,9 +1,8 @@
 <?php
 
-use Site\Core\Utility\ExceptionUtility;
 use Site\Core\Utility\FieldUtility;
 
-$fieldName = $config['fieldConfig']['fieldName'] ?? ExceptionUtility::throw(
+$fieldName = $config['fieldConfig']['fieldName'] ?? new Exception(
     'The field "File" requires a configured "fieldName"-fieldConfig value.',
     1628330053
 );

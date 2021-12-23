@@ -24,7 +24,7 @@ class ButtonBarHook
             /** @var PageRenderer */
             $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
 
-            $path = '/typo3conf/ext/'.env('CORE_EXT').'/Resources/Public/JavaScript';
+            $path = '/typo3conf/ext/site_core/Resources/Public/JavaScript';
 
             $pageRenderer->loadRequireJsModule("{$path}/SaveShortcut.js");
             $pageRenderer->loadRequireJsModule("{$path}/CloseShortcut.js");

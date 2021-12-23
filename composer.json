@@ -1,9 +1,9 @@
 {
     "name": "site/site-core",
     "type": "typo3-cms-extension",
-    "description": "Core Extension for a TYPO3 Application.",
+    "description": "Core Extension for any modern TYPO3 Application.",
     "license": "GPL-2.0-or-later",
-    "version": "3.3.0",
+    "version": "3.4.0",
     "minimum-stability": "stable",
     "authors": [
         {
@@ -13,9 +13,10 @@
         }
     ],
     "require": {
+        "php": "^8.1",
         "typo3/cms-core": "^11.5",
-        "b13/container": "*",
-        "symfony/dotenv": "*",
+        "b13/container": "^1.4.1",
+        "symfony/dotenv": "^6.0",
         "dflydev/dot-access-data": "^3.0"
     },
     "autoload": {
@@ -23,11 +24,9 @@
             "Site\\Core\\": "Classes/"
         }
     },
-    "scripts": {
-        "post-autoload-dump": [
-            "Site\\Core\\Composer\\Scripts::postAutoloadDump",
-            "Site\\Core\\Composer\\EnvLoader::postAutoloadDump"
-        ]
+    "suggest": {
+        "site/site-frontend": "site/site-core depends on site/site-frontend.",
+        "site/site-backend": "site/site-core heavily depends on site/site-backend."
     },
     "extra": {
         "typo3/cms": {

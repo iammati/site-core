@@ -8,8 +8,6 @@ class FormEngineService
 {
     /**
      * Registers a new node for the FormEngine.
-     *
-     * @param mixed $class
      */
     public static function register(string $nodeName, int $priority, $class, int $time)
     {

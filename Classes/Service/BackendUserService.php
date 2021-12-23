@@ -11,21 +11,16 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class BackendUserService
 {
-    /**
-     * @var BackendUserRepository
-     */
-    protected $backendUserRepository;
+    protected BackendUserRepository $backendUserRepository;
 
     /**
      * Fetch the current logged-in Backend-User by reading the cookie which
      * represents the logged-in BE-User's session-id and via queries it fetches
      * the uid of that one and additionally a findByUid using the BackendUserRepository.
-     *
-     * @return null|BackendUser
      */
-    public function getUser()
+    public function getUser(): ?BackendUser
     {
-        $backendUserRepository = GeneralUtility::makeInstance(BackendUserRepository::class);
+        $this->backendUserRepository = GeneralUtility::makeInstance(BackendUserRepository::class);
         $cookieSesId = $_COOKIE['be_typo_user'];
 
         if (!$cookieSesId) {
@@ -49,17 +44,13 @@ class BackendUserService
 
         $sesUserId = $res['ses_userid'];
 
-        $backendUser = $backendUserRepository->findByUid($sesUserId);
-
+        $backendUser = $this->backendUserRepository->findByUid($sesUserId);
         $backendUser->uc = $this->findUcByUid($sesUserId);
 
         return $backendUser;
     }
 
-    /**
-     * @return null|array
-     */
-    protected function findUcByUid(int $uid)
+    private function findUcByUid(int $uid): ?array
     {
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('be_users');
 

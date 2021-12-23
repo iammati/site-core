@@ -1,11 +1,9 @@
 ## Creating a new Content-Element
 
-Assuming your backend / custom extension of your project is called <a href="https://github.com/iammati/site-backend" target="_blank">site_backend</a>.
-
-We will create a RTE (Rich-Text-Editor) Content-Element in this example.
+We will create a RTE (Rich-Text-Editor) content-element in this example.
 
 <div class="note">
-    To understand how to render this Content-Element using the custom CTypes-Rendering instead of the typical TypoScript configuration, it's recommended to check that out here: <a href="../../rendering/ctypes/">Frontend-Rendering — CTypes</a>.
+    To understand how to render this content-element using the custom CType rendering event instead of the typical TypoScript configuration, it's recommended to check that out here: <a href="../../rendering/engine/">Frontend-Rendering-Engine — FRE</a>.
 </div>
 
 #### Creation of the new TCA field called `fd_rte`.

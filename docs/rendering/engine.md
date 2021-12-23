@@ -1,7 +1,7 @@
 ## Frontend Rendering Engine — FRE
 
 Using the <a href="https://github.com/iammati/site-frontend" target="_blank">site_frontend</a> TYPO3 extension,
-your Content-Elements will automatically resolve template paths and won't require you to write any kind of TypoScript like this:
+your content elements will automatically be resolved, template paths won't be required or any kind of TypoScript like this:
 
 ```
 tt_content.ce_rte =< lib.contentElement
@@ -13,6 +13,8 @@ tt_content.ce_rte {
     }
 }
 ```
+
+at all.
 
 Instead you can use PHP and the _Frontend-Rendering-Engine_ provided by the <a href="https://github.com/iammati/site-frontend" target="_blank">site_frontend</a> extension.
 
@@ -60,16 +62,14 @@ While the pros using the FRE are:
 * Customize the fetched records by listening within a `RenderingEvent`
 * Data is passed to your view (fluidtemplate) as `data.<TCA / SQL fieldname>` e.g. `data.irres_accordions_item`
 
----
+**Requirements for another way instead of dataProcessing:**
 
-**Requirements:**
-
-* Model (formerly also known as Entity)
+* Entity (formerly known as Model)
 * Repository
 
 <details>
     <summary>
-        Accordions — Model
+        Accordions — Entity
     </summary>
 
     ```
@@ -85,9 +85,11 @@ While the pros using the FRE are:
     {
         protected string $header = '';
 
-        public function setHeader(string $header)
+        public function setHeader(string $header): self
         {
             $this->header = $header;
+
+            return $this;
         }
 
         public function getHeader(): string
@@ -97,7 +99,7 @@ While the pros using the FRE are:
     }
     ```
 
-    Example code of an Accordions model.
+    Example code of an Accordion entity.
     <div class="mb-1"></div>
 </details>
 
@@ -115,16 +117,17 @@ While the pros using the FRE are:
 
     use TYPO3\CMS\Extbase\Persistence\Repository;
 
+    /** Empty repository as placeholder to get magic methods just like findAll etc. */
     class AccordionsRepository extends Repository
     {
     }
     ```
 
-    Example code of an Accordions repository.
+    Example code of an Accordion repository.
     <div class="mb-1"></div>
 
     <div class="note">
-        The repository can stay empty with no custom methods at all. It extends the default repository provided by TYPO3 which offers the main functionality.
+        The repository can stay empty with no custom methods at all. It extends the default repository provided by TYPO3 which offers the main functionality e.g. `findAll` or `findByUid` which are essential for `site/site-core`.
     </div>
 </details>
 
@@ -132,44 +135,74 @@ While the pros using the FRE are:
 
 **Auto-Mapping of IRREs works only if the representative repository-class has been found. Otherwise nothing happens at all since you may use TypoScript or any other kind of rendering.**
 
-Since <a href="https://github.com/iammati/site-core" target="_blank">site-core</a> 2.0 the models and repositories are automatically created if the files are not present in your system. This feature can be disabled though inside `EXT:site_frontend/Configuration/Config.php` under `ContentElements.rendering.autoGenerateModelRepos`.
+The entities/repositories are able to be created automatically. This feature can be disabled though inside `EXT:site_frontend/Configuration/Config.php` under `ContentElements.rendering.autoGenerateModelRepos` since it's risky.
 
-By default it's false and only respected if it's present inside your `Config.php` file.
+By default it's false and only respected if it's present inside your `Config.php` file + set to `true`.
 
 ---
 
-If you have all requirements, you can create a new `EXT:site_frontend/Classes/Event/Rendering/<Name of your CType>RenderingEvent.php` (e.g. `EXT:site_frontend/Classes/Event/Rendering/RteRenderingEvent.php`) file and add the following code now:
+If you have all requirements, you can create a new `EXT:site_frontend/Classes/Configuration/Listener/<Name of your CType>RenderingListener.php` (e.g. `EXT:site_frontend/Classes/Configuration/Listener/RteRenderingListener.php`) file and add the following code now:
 
-```
-<?php
+<details>
+    <summary>
+        RteRenderingListener
+    </summary>
 
-declare(strict_types=1);
+    ```
+    <?php
 
-namespace Site\Frontend\Event\Rendering;
+    declare(strict_types=1);
 
-use Site\Frontend\Interfaces\CTypeRenderingInterface;
-use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+    namespace Site\Frontend\Configuration\Listener;
 
-class RteRenderingEvent implements CTypeRenderingInterface
-{
-    /**
-     * Called before the HTML output of a record has been rendered.
-     */
-    public function beforeRendering(ContentObjectRenderer &$cObj)
+    use Site\Frontend\Configuration\Event\CTypeRenderingEvent;
+    use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
+    use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+
+    class RteRenderingListener
     {
-        // ...
-    }
+        protected DataMapper $dataMapper;
+        protected ContentObjectRenderer $cObj;
 
-    /**
-     * Called after the HTML output of a record has been rendered.
-     */
-    public function afterRendering(ContentObjectRenderer &$cObj)
-    {
-        // ...
-    }
-```
+        public function __construct(DataMapper $dataMapper)
+        {
+            $this->dataMapper = $dataMapper;
+        }
 
-Those events are handled by the site-backend extension. You can use/manipulate the `ContentObjectRenderer $cObj` object within your custom Rendering-Event now.
+        public function __invoke(CTypeRenderingEvent $event)
+        {
+            $this->cObj = $event->getCObj();
+
+            $data = $this->cObj->data;
+            $CType = $data['CType'];
+
+            if ($CType === 'ce_rte') {
+                $data['fd_rte'] = str_replace('<3', '❤️', $data['fd_rte']);
+            }
+
+            $this->cObj->data = $data;
+
+            return $this->cObj;
+        }
+    }
+    ```
+</details>
+
+<details>
+    <summary>
+        Services.yaml
+    </summary>
+
+    ```
+    Site\Frontend\Configuration\Listener\RteRenderingListener:
+      tags:
+        - name: event.listener
+          identifier: 'site-frontend/rendering-listener/rte'
+          event: Site\Frontend\Configuration\Event\RteRenderingEvent
+    ```
+</details>
+
+The custom `RteRenderingListener` event will transform – in case its CType equals `ce_rte` and your SQL/TCA column is named `fd_rte` (where `fd` stands for `field`) – '<3' into the heart-emoji now. (:
 
 #### Automapping of IRRE fields from TCA to frontend view (template)
 

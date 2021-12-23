@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Site\Core\Form\Fields;
 
-use Site\Core\Utility\ExceptionUtility;
+use Exception;
 use Symfony\Component\Finder\Finder;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
@@ -12,17 +12,13 @@ class Field
 {
     protected static string $configurationRootPath = '/Configuration/Fields/';
 
-    /**
-     * @param string $fieldIdentifier The identifier of a field e.g. 'Input'.
-     * @param array  $config          a TCA field-configuration
-     */
     public static function create(string $fieldIdentifier, array $config): array
     {
         $pathToField = self::$configurationRootPath.$fieldIdentifier.'.php';
 
         $extKeys = [
-            env('CORE_EXT'),
-            env('BACKEND_EXT'),
+            'site_core',
+            'site_backend',
         ];
 
         $fieldConfigFile = null;
@@ -44,7 +40,7 @@ class Field
         }
 
         if (null === $fieldConfigFile) {
-            ExceptionUtility::throw(
+            new Exception(
                 sprintf(
                     'Field - Could not create field of identifier-type: "%s"'.
                     "\n".'There was no configuration file found - searched node-path were %s',

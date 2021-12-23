@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Site\Core\Service;
 
+use Exception;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Site\Core\Helper\ConfigHelper;
-use Site\Core\Utility\ExceptionUtility;
 use Site\Core\Utility\FileUtility;
 use Site\Core\Utility\FlashUtility;
-use Site\Core\Utility\StrUtility;
 use Site\Core\Configuration\Event\AfterCeDefaultTcaRetrievedEvent;
-use Symfony\Component\DependencyInjection\Container as DependencyInjectionContainer;
 use Symfony\Component\Finder\Finder;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
@@ -39,7 +37,6 @@ class TcaService
     public const FILE_REFERENCE_NAMESPACE = '\TYPO3\CMS\Extbase\Domain\Model\FileReference';
     public const OBJECT_STORAGE_FILE_REFERENCE_NAMESPACE = '\TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>';
     protected static string $TCAServiceConfigs = __DIR__.'/../../Configuration/Fields';
-
     protected static FlashUtility $flashUtility;
     protected static EventDispatcherInterface $eventDispatcher;
 
@@ -58,6 +55,8 @@ class TcaService
      * @param array  $additionalFieldConfig An optional array for e.g. onChange => 'reload' etc
      *
      * @return array|bool
+     * 
+     * @deprecated since v3, will be removed in v4
      */
     public static function findConfigByType(
         string $type,
@@ -65,7 +64,7 @@ class TcaService
         string $label = '',
         array $additionalConfig = [],
         array $additionalFieldConfig = []
-    ) {
+    ): array|bool {
         self::$flashUtility = GeneralUtility::makeInstance(FlashUtility::class);
 
         $filepath = __DIR__.'/../../Configuration/Fields/'.$type.'.php';
@@ -143,7 +142,7 @@ class TcaService
             // else overwriting it inside $config
             if ('InlineItem' == $type) {
                 if (!isset($additionalConfig['foreign_table'])) {
-                    ExceptionUtility::throw('TcaService - Type: '.$type.'.php - $additionalConfig missing "foreign_table" value');
+                    new Exception('TcaService - Type: '.$type.'.php - $additionalConfig missing "foreign_table" value');
                 }
                 $config['config']['foreign_table'] = $additionalConfig['foreign_table'] ?? '';
             }
@@ -151,7 +150,7 @@ class TcaService
             // Slug field
             if ('Slug' == $type) {
                 if (!isset($additionalConfig['generatorOptions']['fields'])) {
-                    ExceptionUtility::throw('TcaService - Type: '.$type.'.php - $additionalConfig missing "generatorOptions[fields]" for Slug-field as value');
+                    new Exception('TcaService - Type: '.$type.'.php - $additionalConfig missing "generatorOptions[fields]" for Slug-field as value');
                 }
                 $config['config']['generatorOptions']['fields'] = $additionalConfig['generatorOptions']['fields'] ?? '';
             }
@@ -206,12 +205,12 @@ class TcaService
      */
     public static function showFields(string $CType, string $fields, string $additionalFields = '')
     {
-        if (!StrUtility::endsWith(trim($fields), ',')) {
+        if (!str_ends_with(trim($fields), ',')) {
             $fields .= ',';
         }
 
         if ('' != $additionalFields) {
-            if (!StrUtility::endsWith($additionalFields, ',')) {
+            if (!str_ends_with($additionalFields, ',')) {
                 $additionalFields .= ',';
             }
 
@@ -414,7 +413,7 @@ class TcaService
      * Adds TCA configuuration to a site configuration.
      *
      * @param string $tabName             The name of the tab
-     * @param string $fieldConfigurations An array of field configurations
+     * @param array $fieldConfigurations  An array of field configurations
      */
     public static function addSiteConfigurationTCA(string $tabName, array $fieldConfigurations)
     {
@@ -437,8 +436,8 @@ class TcaService
     public static function allowTablesStartsWith(string $startsWith)
     {
         foreach ($GLOBALS['TCA'] as $key => $tca) {
-            if (StrUtility::startsWith($key, $startsWith) && StrUtility::contains($key, '_domain_model_')) {
-                \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages($key);
+            if (str_starts_with($key, $startsWith) && str_contains($key, '_domain_model_')) {
+                ExtensionManagementUtility::allowTableOnStandardPages($key);
             }
         }
     }
@@ -449,10 +448,8 @@ class TcaService
      *
      * @param string $dir            path to 'EXT:/Configuration/TCA/Overrides/'
      * @param bool   $applyLocallang condition whether to apply the locallang or not which is not always necessary
-     *
-     * @return array
      */
-    public static function fetchCEs(string $dir, bool $applyLocallang = true)
+    public static function fetchCEs(string $dir, bool $applyLocallang = true): array
     {
         $CTypes = [];
 
@@ -462,7 +459,7 @@ class TcaService
             $fileNameWithExtension = $file->getRelativePathname();
             $fileName = str_replace('.php', '', $fileNameWithExtension);
 
-            if (StrUtility::startsWith($fileNameWithExtension, 'ce_')) {
+            if (str_starts_with($fileNameWithExtension, 'ce_')) {
                 $CTypes[] = $fileName;
             }
         }
@@ -472,7 +469,7 @@ class TcaService
                 $identifier = 'Backend.ContentElements:'.getCeByCtype($CType, false);
 
                 $localizedLabel = ll(
-                    env('BACKEND_EXT'),
+                    'site_backend',
                     $identifier
                 )['title'] ?? $CType.' - "'.$identifier.'"-localization is not configured';
 
@@ -491,7 +488,7 @@ class TcaService
      *
      * @param string $dir The current __DIR__ passed
      */
-    public static function loadCEs(string $dir, string $itemGroupIdentifier = 'customelements')
+    public static function loadCEs(string $dir, string $itemGroupIdentifier = 'customelements'): void
     {
         $CTypes = self::fetchCEs($dir);
         TcaService::addSelectItems($CTypes, $itemGroupIdentifier);
@@ -507,7 +504,7 @@ class TcaService
      *
      * @see generateIconIdentifier()
      */
-    public static function registerCEIcons(string $dir, string $extKey)
+    public static function registerCEIcons(string $dir, string $extKey): void
     {
         /** @var IconRegistry */
         $iconRegistry = GeneralUtility::makeInstance(IconRegistry::class);
@@ -547,19 +544,19 @@ class TcaService
      *
      * @param string $path The path passed as __DIR__.'/..'
      */
-    public static function registerIRREs(string $path, string $replacer)
+    public static function registerIRREs(string $path, string $replacer): void
     {
         $path = realpath($path);
 
         if (!$path) {
-            ExceptionUtility::throw('The provided path "'.$path.'" doesn\'t seems to be fine for the TcaService::registerIRREs');
+            new Exception('The provided path "'.$path.'" doesn\'t seems to be fine for the TcaService::registerIRREs');
         }
 
-        if (!StrUtility::endsWith($replacer, '_')) {
+        if (!str_ends_with($replacer, '_')) {
             $replacer .= '_';
         }
 
-        $irrePrefix = ConfigHelper::get(env('BACKEND_EXT'), 'IRREs.itemPrefix') ?? 'irre_';
+        $irrePrefix = ConfigHelper::get('site_backend', 'IRREs.itemPrefix') ?? 'irre_';
 
         $finder = FileUtility::retrieveFilesByPath($path)->name($replacer.'*.php');
 
@@ -588,16 +585,10 @@ class TcaService
 
     /**
      * Generates the icon-identifier by the provided CType.
-     *
-     * @param string $CType
-     *
-     * @return string
      */
-    public static function generateIconIdentifier($CType)
+    public static function generateIconIdentifier(string $CType): string
     {
-        $backendExt = str_replace('_', '-', env('BACKEND_EXT'));
-
-        return $backendExt.'-'.str_replace('_', '-', $CType);
+        return 'site-backend-'.str_replace('_', '-', $CType);
     }
 
     /**
@@ -606,12 +597,12 @@ class TcaService
      *
      * @param string $dir Path to 'EXT:/Configuration/TCA/Overrides/'
      */
-    public static function registerBackendPreviews(string $dir)
+    public static function registerBackendPreviews(string $dir): void
     {
-        if (true === ConfigHelper::get(env('BACKEND_EXT'), 'Backend.Preview.enabled')) {
+        if (ConfigHelper::get('site_backend', 'Backend.Preview.enabled') === true) {
             $CTypes = self::fetchCEs($dir, false);
 
-            $renderer = ConfigHelper::get(env('BACKEND_EXT'), 'Backend.Preview.renderer');
+            $renderer = ConfigHelper::get('site_backend', 'Backend.Preview.renderer');
 
             if ($renderer) {
                 foreach ($CTypes as $CType) {
@@ -660,7 +651,7 @@ class TcaService
                 if ('sys_file_reference' == $foreignTable) {
                     $properties[$fileReferenceNamespace][$fieldName] = 'null';
                 } else {
-                    $irresPrefix = ConfigHelper::get(env('BACKEND_EXT'), 'IRREs.prefix');
+                    $irresPrefix = ConfigHelper::get('site_backend', 'IRREs.prefix');
 
                     if (str_starts_with($foreignTable, $irresPrefix)) {
                         // @todo finish this

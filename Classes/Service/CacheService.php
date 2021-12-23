@@ -4,22 +4,16 @@ declare(strict_types=1);
 
 namespace Site\Core\Service;
 
+use Closure;
+use Exception;
 use Site\Core\Interfaces\CacheInterface;
-use Site\Core\Utility\ExceptionUtility;
 use Site\Core\Utility\StrUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class CacheService implements CacheInterface
 {
-    /**
-     * @var string
-     */
-    protected $path = '';
-
-    /**
-     * @var string
-     */
-    protected $fileExtension = '';
+    protected string $path = '';
+    protected string $fileExtension = '';
 
     /**
      * Defines the path where the cached files
@@ -27,7 +21,7 @@ class CacheService implements CacheInterface
      *
      * @param string $path a relative path of the server
      */
-    public function setPath($path)
+    public function setPath(string $path): void
     {
         $this->path = GeneralUtility::getFileAbsFileName($path);
     }
@@ -43,11 +37,11 @@ class CacheService implements CacheInterface
     {
         $path = $this->path;
 
-        if ('' == $identifier) {
+        if ($identifier === '') {
             return $path;
         }
 
-        if (StrUtility::endsWith($path, '/')) {
+        if (str_ends_with($path, '/')) {
             $path .= $identifier;
         } else {
             $path .= '/'.$identifier;
@@ -63,7 +57,7 @@ class CacheService implements CacheInterface
      * @param string $fileExtension The file-extension passed as string and without
      *                              a '.' (dot) - just the extension itself in lowercase.
      */
-    public function setFileExtension($fileExtension)
+    public function setFileExtension(string $fileExtension): void
     {
         $this->fileExtension = $fileExtension;
     }
@@ -71,7 +65,7 @@ class CacheService implements CacheInterface
     /**
      * Retrieves the file-extension of this cache service.
      */
-    public function getFileExtension()
+    public function getFileExtension(): string
     {
         return $this->fileExtension;
     }
@@ -81,25 +75,13 @@ class CacheService implements CacheInterface
      * cached file or not by checking its existance.
      *
      * @param string $identifier Name of cached file without file-extension
-     *
-     * @return bool
      */
-    public function has(string $identifier)
+    public function has(string $identifier): bool
     {
         return file_exists($this->getPath().$identifier.'.'.$this->getFileExtension());
     }
 
-    /**
-     * Retrieves a cached file by its identifier.
-     *
-     * @param string        $identifier        The identifier of the cached file - converted to a friendly readable string
-     * @param null|\Closure $notCachedCallback Optional. If provided, this closure will be called
-     *                                         in case there's no cached file found by the given identifier,
-     *                                         which will then cache it immediately by the returned data.
-     *
-     * @return bool|string
-     */
-    public function get(string $identifier, \Closure $notCachedCallback = null)
+    public function get(string $identifier, ?Closure $notCachedCallback): bool|string
     {
         $identifier = StrUtility::convertUri($identifier);
 
@@ -120,16 +102,7 @@ class CacheService implements CacheInterface
         );
     }
 
-    /**
-     * Adds a new cached file into the Caches by using the provided $identifier as filename and $content as the content itself.
-     * If the given $identifier exists as a cached file already it'll return a true.
-     *
-     * @param string $identifier The identifier used to be called
-     * @param string $content    The actual content which should be cached
-     *
-     * @return bool|void
-     */
-    public function add(string $identifier, string $content)
+    public function add(string $identifier, string $content): void
     {
         $identifier = StrUtility::convertUri($identifier);
 
@@ -143,16 +116,16 @@ class CacheService implements CacheInterface
         $filePutContents = file_put_contents($cacheFilePath, $content);
 
         if (!$filePutContents) {
-            ExceptionUtility::throw('Fatal. CacheService was not able to create the "'.$cacheFilePath.'"-file.');
+            new Exception('Fatal. CacheService was not able to create the "'.$cacheFilePath.'"-file.');
         }
     }
 
     /**
-     * Deletes a cache by its identifier if its present.
+     * Deletes a cache by its identifier if it's present.
      *
      * @param string $identifier The filename used to be called
      */
-    public function remove(string $identifier)
+    public function remove(string $identifier): void
     {
         $cacheFilePath = $this->getPath($identifier.'.'.$this->getFileExtension());
 
@@ -176,7 +149,7 @@ class CacheService implements CacheInterface
      *
      * @param string $data The HTML string which should be optimized
      *
-     * @todo Find a way to minify / compress it down the HTML as an oneliner.
+     * @todo Find a way to minify / compress the HTML down to an oneliner.
      */
     public function optimizeData(string $data): string
     {

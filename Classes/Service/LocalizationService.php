@@ -7,7 +7,6 @@ namespace Site\Core\Service;
 use Dflydev\DotAccessData\Data;
 use Exception;
 use Site\Core\Helper\ConfigHelper;
-use Site\Core\Utility\ExceptionUtility;
 use Site\Core\Utility\StrUtility;
 use Symfony\Component\Finder\Finder;
 use TYPO3\CMS\Core\Core\Bootstrap;
@@ -133,7 +132,7 @@ class LocalizationService
      * This is the actual logic which finds a locallized / translated string
      * by the given $extKey-string as the targeted $key-string.
      *
-     * @throws ExceptionUtility
+     * @throws Exception
      */
     public function findByKey(string $extKey, string $key, string $twoLetterIsoCode = '')
     {
@@ -141,9 +140,7 @@ class LocalizationService
             return;
         }
 
-        $backendExt = env('BACKEND_EXT') ?: 'BACKEND_EXT';
-        $localizationType = strtolower(ConfigHelper::get($backendExt, 'localizationType') ?? 'custom');
-
+        $localizationType = strtolower(ConfigHelper::get('site_backend', 'localizationType') ?? 'custom');
         $localizedStr = '';
 
         switch ($localizationType) {
@@ -228,7 +225,7 @@ class LocalizationService
                 break;
 
             default:
-                ExceptionUtility::throw(
+                new Exception(
                     sprintf(
                         'There must be a configured localizationType to either "xliff" or "custom" inside EXT:%s/Config.php:localizationType value to handle whether you want to use XLIFF or EXT:%s\'s custom ll-function!',
                         $backendExt,

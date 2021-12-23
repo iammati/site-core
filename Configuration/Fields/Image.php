@@ -1,11 +1,10 @@
 <?php
 
-use Site\Core\Utility\ExceptionUtility;
 use Site\Core\Utility\FieldUtility;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
-$fieldName = $config['fieldConfig']['fieldName'] ?? ExceptionUtility::throw(
+$fieldName = $config['fieldConfig']['fieldName'] ?? new Exception(
     'The field "Image" requires a configured "fieldName"-fieldConfig value.',
     1628330060
 );

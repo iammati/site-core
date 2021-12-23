@@ -1,3 +1,3 @@
 # Changelog
 
-## [v2.0.0 <small>— 2021-07-04</small>](./changelog/2.0.0.md)
+## [v3.4.0 <small>— 2021/12/23</small>](./changelog/3.4.0.md)

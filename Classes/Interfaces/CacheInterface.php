@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Site\Core\Interfaces;
 
+use Closure;
+
 interface CacheInterface
 {
     /**
@@ -12,7 +14,7 @@ interface CacheInterface
      *
      * @param string $path A relative path of the server
      */
-    public function setPath($path);
+    public function setPath(string $path): void;
 
     /**
      * Retrieves the relative path where cached files are placed.
@@ -28,24 +30,22 @@ interface CacheInterface
      *
      * @param string $fileExtension The file-extension passed as string and without a '.' (dot) - just the extension itself in lowercase.
      */
-    public function setFileExtension($fileExtension);
+    public function setFileExtension(string $fileExtension);
 
     /**
      * Retrieves the file-extension of this cache service.
      */
-    public function getFileExtension();
+    public function getFileExtension(): string;
 
     /**
      * Retrieves a cached file by its identifier.
      *
      * @param string        $identifier        Name of cached file without file-extension
-     * @param null|\Closure $notCachedCallback Optional. If provided, this closure will be called
+     * @param null|Closure $notCachedCallback  Optional. If provided, this closure will be called
      *                                         in case there's no cached file found by the given identifier,
      *                                         which will then cache it immediately by the returned data.
-     *
-     * @return bool|string
      */
-    public function get(string $identifier, \Closure $notCachedCallback = null);
+    public function get(string $identifier, ?Closure $notCachedCallback): bool|string;
 
     /**
      * Adds a new cache into the HTML-Caches file by using its $identifier as filename and $content as of the HTML-content.
@@ -53,15 +53,13 @@ interface CacheInterface
      *
      * @param string $identifier The filename used to be called
      * @param string $content    The actual HTML-Content which should be cached
-     *
-     * @return bool|void
      */
-    public function add(string $identifier, string $content);
+    public function add(string $identifier, string $content): bool|void;
 
     /**
      * Deletes a cache by its identifier.
      *
      * @param string $identifier The identifier used to be deleted
      */
-    public function remove(string $identifier);
+    public function remove(string $identifier): void;
 }

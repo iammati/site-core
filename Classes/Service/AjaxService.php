@@ -15,6 +15,7 @@ namespace Site\Core\Service;
  * where the * could be anything as a string given - e.g. 'index'.
  *
  * @author Mati <mati_01@icloud.com>
+ * @deprecated deprecated since v3 will be removed in v4 – use TYPO3's middleware stack
  */
 class AjaxService
 {

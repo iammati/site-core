@@ -9,26 +9,18 @@ use TYPO3\CMS\Core\Localization\LanguageService;
 
 class TypoScriptParser
 {
-    public function ll(&$params)
+    public function ll(array &$params)
     {
         $functionArgument = $params['functionArgument'];
 
-        $backendExt = env('BACKEND_EXT');
-
-        return ll($backendExt, $functionArgument, $this->getLanguageService());
+        return ll('site_backend', $functionArgument, $this->getLanguageService());
     }
 
-    /**
-     * Returns the current BE user.
-     */
     protected function getBackendUser(): BackendUserAuthentication
     {
         return $GLOBALS['BE_USER'];
     }
 
-    /**
-     * Returns the current LanguageService.
-     */
     protected function getLanguageService(): LanguageService
     {
         return $GLOBALS['LANG'];

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace {NAMESPACE};
 
-class {CLASS_NAME} extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+
+class {CLASS_NAME} extends AbstractEntity
 {
     {CLASS_CONTENT}
 }

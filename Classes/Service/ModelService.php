@@ -23,7 +23,7 @@ class ModelService
         if (!file_exists($modelPath)) {
             $flashUtility = new \Site\Core\Utility\FlashUtility();
 
-            $mainPath = ExtensionManagementUtility::extPath(env('CORE_EXT'));
+            $mainPath = ExtensionManagementUtility::extPath('site_core');
 
             $templateFile = $mainPath.'Classes/Service/MODEL_TEMPLATE';
             $templateContent = file_get_contents($templateFile);
@@ -32,11 +32,11 @@ class ModelService
             $modelFolder = ExtensionManagementUtility::extPath($extKey).'Classes/Domain/Model';
 
             if (!is_dir($domainFolder) || !is_dir($modelFolder)) {
-                return $flashUtility->message('Core (EXT:'.env('CORE_EXT').') - Model Service', 'There\'s no such folder: $domainFolder AND/OR $modelFolder', 1);
+                return $flashUtility->message('Core (EXT:site_core) - Model Service', 'There\'s no such folder: $domainFolder AND/OR $modelFolder', 1);
             }
 
             $newModelFile = fopen($modelPath, 'w')
-            or $flashUtility->message('Core (EXT:'.env('CORE_EXT').') - Model Service', 'Couldn\'t create file - permissions?', 2);
+            or $flashUtility->message('Core (EXT:site_core) - Model Service', 'Couldn\'t create file - permissions?', 2);
 
             $content = self::updateContent($extKey, $templateContent, $namespace, $modelName, $properties);
             fwrite($newModelFile, $content);

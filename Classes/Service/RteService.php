@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Site\Core\Service;
 
-class RTEService
+class RteService
 {
     /**
      * Registers a new YAML RTE configuration file
@@ -14,7 +14,7 @@ class RTEService
      * @param string $yamlFileName the name of the targeted YAML file to be registered
      * @param string $identifier   Optional. Default value of the identifier is 'default'.
      */
-    public static function register(string $extKey, string $yamlFileName, string $identifier = 'default')
+    public static function register(string $extKey, string $yamlFileName, string $identifier = 'default'): void
     {
         $GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets'][$identifier] = 'EXT:'.$extKey.'/Configuration/RTE/'.$yamlFileName.'.yaml';
     }
