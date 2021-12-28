@@ -3,19 +3,18 @@
 // To avoid problems using in the CLI the typo3_console composer-package
 // the helper-functions will work in any other request-type except the CLI itself.
 
+use Site\Core\Configuration\DotenvLoader;
 use Site\Core\Service\LocalizationService;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
+(new DotenvLoader())->postAutoloadDump();
+
 if (!function_exists('ll')) {
     /** @throws Exception */
     function ll(string $extKey, string $locallangLabel, string $twoLetterIsoCode = '')
     {
-        // if (serverRequest()->getUri() === null) {
-        //     return '';
-        // }
-
         /** @var LocalizationService $localizationService */
         $localizationService = GeneralUtility::makeInstance(LocalizationService::class);
 

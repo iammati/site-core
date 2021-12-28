@@ -81,7 +81,7 @@ class CacheService implements CacheInterface
         return file_exists($this->getPath().$identifier.'.'.$this->getFileExtension());
     }
 
-    public function get(string $identifier, ?Closure $notCachedCallback): bool|string
+    public function get(string $identifier, ?Closure $notCachedCallback = null): bool|string
     {
         $identifier = StrUtility::convertUri($identifier);
 
