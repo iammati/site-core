@@ -1,40 +1,46 @@
-site_name: Site-Core Documentation
+site_name: Site-Core TYPO3 Extension Documentation
 repo_url: https://github.com/iammati/site-core
-site_url: https://github.com/iammati/site-core
 repo_name: GitHub
-edit_uri: blob/master/docs/
-
+edit_uri: blob/main/Documentation/
+copyright: MIT
+docs_dir: 'Documentation'
+dev_addr: '127.0.0.1:2000'
 theme:
   name: 'material'
   palette:
     primary: 'light-blue'
-
-plugins:
-  - 'search'
-
-  - exclude:
-      glob:
-        - assets/node_modules/*
-
+extra_javascript:
+  - 'assets/public/JavaScript/app.min.js'
+extra_css:
+  - 'assets/public/Css/app.min.css'
 markdown_extensions:
   - pymdownx.highlight
   - pymdownx.superfences
-
+  - toc:
+      permalink: true
+  - admonition
+  - def_list
+  - mdx_truly_sane_lists:
+      nested_indent: 2
+      truly_sane: true
+  - nl2br
+  - pymdownx.details
+  - pymdownx.superfences
+  - meta
+plugins:
+  - search
+  - git-revision-date-localized:
+      type: timeago
+      locale: en
+  - exclude:
+      glob:
+        - assets/node_modules/*
 nav:
   - 'Home': 'index.md'
   - 'Changelog':
     - 'Summary': 'changelog.md'
-    - 'v2.0.0': 'changelog/2.0.0.md'
-
-  - 'Services':
-    - 'Tca-Service': 'services/tca-service.md'
-    # - 'Model-Service': 'services/model.md'
-
+    - 'v3.4.0': 'changelog/3.4.0.md'
   - 'Frontend-Rendering':
     - 'Engine': 'rendering/engine.md'
-
-extra_javascript:
-  - 'assets/public/JavaScript/app.min.js'
-
-extra_css:
-  - 'assets/public/Css/app.min.css'
+  - 'Services':
+    - 'Tca-Service': 'services/tca-service.md'

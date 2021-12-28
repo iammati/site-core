@@ -54,7 +54,7 @@ interface CacheInterface
      * @param string $identifier The filename used to be called
      * @param string $content    The actual HTML-Content which should be cached
      */
-    public function add(string $identifier, string $content): bool|void;
+    public function add(string $identifier, string $content): ?bool;
 
     /**
      * Deletes a cache by its identifier.

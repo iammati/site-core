@@ -10,3 +10,11 @@ Simple `composer req site/site-core`
 ---
 
 For documentation please head over to [site-core.readthedocs.io](https://site-core.readthedocs.io/)
+
+---
+
+## License
+
+MIT
+
+For more information please see [LICENSE](https://github.com/iammati/site-core/blob/main/LICENSE)

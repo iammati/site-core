@@ -1,6 +1,10 @@
 <?php
 
+use Symfony\Component\Dotenv\Dotenv;
+
 (function () {
+    (new Dotenv())->load($_SERVER['DOCUMENT_ROOT'].'/.env');
+
     // Defining AJAX into $GLOBALS TYPO3_CONF_VARS
     if (!isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['AJAX'])) {
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['AJAX'] = [];
