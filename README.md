@@ -1,17 +1,17 @@
-EXT:site-core
----
-**A must-have core extension for new TYPO3 applications - especially a life-saver when working with TCA - but also comes handy for any other use-case.**
+# EXT:site-core - A TYPO3 Extension to use solid APIs during development
 
----
+## Features
+- Simplified the way to [create way faster new Content-Elements](https://site-core.readthedocs.io/en/main/services/tca-service/)
+- An easier way of rendering custom Content-Elements via ["Frontend-Rendering-Engine"](https://site-core.readthedocs.io/en/main/rendering/engine/) (also PSR-14 Events!)
+- Includes a bunch of custom utility-classes as services
+- Will always support LTS versions of both TYPO3 and PHP - currently v11.5 and v8.1
 
 ## Installation
-Simple `composer req site/site-core`
+`composer req site/site-core`
 
----
+## Documentation
 
 For documentation please head over to [site-core.readthedocs.io](https://site-core.readthedocs.io/)
-
----
 
 ## License
 
