@@ -15,7 +15,6 @@ use Symfony\Component\Dotenv\Dotenv;
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['TCA_SERVICE'] = [
             'loadedIRREs' => [],
             'loadedCEs' => [],
-
             'fileExtensions' => [],
         ];
     }

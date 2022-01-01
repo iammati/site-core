@@ -33,7 +33,7 @@ class WizardItemsHook implements NewContentElementWizardHookInterface
      */
     public function manipulateWizardItems(&$wizardItems, &$parentObject)
     {
-        $txContainerParent = (int)$_GET['tx_container_parent'] ?? null;
+        $txContainerParent = isset($_GET['tx_container_parent']) ? (int)$_GET['tx_container_parent'] : null;
         $backendExt = 'site_backend';
 
         if (!$this->packageManager->isPackageActive($backendExt)) {
