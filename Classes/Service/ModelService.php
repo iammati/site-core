@@ -57,10 +57,7 @@ class ModelService
         foreach ($properties as $varType => $propertyDatas) {
             foreach ($propertyDatas as $property => $value) {
                 $dataContent .= "
-    /**
-     * @var {$varType}
-     */
-    protected $".$property.' = '.$value.';
+    protected {$varType} $".$property.' = '.$value.';
     ';
             }
         }
@@ -72,12 +69,14 @@ class ModelService
                 ++$i;
 
                 $setterGetter = '
-    public function set'.ucfirst($property)."(\${$property})
+    public function set'.ucfirst($property)."({$varType} \${$property}): self
     {
         \$this->{$property} = \${$property};
+
+        return \$this;
     }
 
-    public function get".ucfirst($property)."()
+    public function get".ucfirst($property)."(): {$varType}
     {
         return \$this->{$property};
     }";
@@ -89,7 +88,7 @@ class ModelService
             }
         }
 
-        if ('Ttcontent' == $modelName) {
+        if ($modelName === 'Ttcontent') {
             $content = str_replace('\TYPO3\CMS\Extbase\DomainObject\AbstractEntity', '\Site\SiteBackend\Domain\Model\BaseTtcontent', $content);
         }
 
