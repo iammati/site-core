@@ -24,12 +24,6 @@ return [
             'elementBrowserEnabled' => 1,
             'elementBrowserAllowed' => 1,
 
-            'headerThumbnail' => [
-                'field' => 'uid_local',
-                'width' => '45',
-                'height' => '45c',
-            ],
-
             'enabledControls' => [
                 'info' => 1,
                 'new' => 1,
