@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Site\Core\Composer;
 
-use Site\Core\Utility\StrUtility;
 use Symfony\Component\Dotenv\Dotenv;
+use TYPO3\CMS\Core\Core\Environment;
 
 class EnvLoader
 {
@@ -28,20 +28,6 @@ class EnvLoader
      */
     protected static function getPath(string $node = '')
     {
-        $rootPath = realpath($_SERVER['DOCUMENT_ROOT'].'/..');
-
-        if ($rootPath == '/') {
-            $rootPath = $_SERVER['PWD'];
-        }
-
-        if ($node != '') {
-            $rootPath .= '/'.$node;
-        }
-
-        if (StrUtility::startsWith($rootPath, '//')) {
-            $rootPath = $_SERVER['DOCUMENT_ROOT'] . '/' . $node;
-        }
-
-        return $rootPath;
+        return Environment::getProjectPath().($node !== '' ? "/${node}" : '');
     }
 }
