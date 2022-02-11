@@ -5,9 +5,15 @@ declare(strict_types=1);
 namespace Site\Core\Configuration;
 
 use Symfony\Component\Dotenv\Dotenv;
+use TYPO3\CMS\Core\Core\Environment;
 
 class DotenvLoader
 {
+    /**
+     * The post-autoloaddump callback for composer.
+     *
+     * @return void
+     */
     public static function postAutoloadDump()
     {
         // Loading the .env file using the Symfony DotEnv-Component
@@ -15,22 +21,13 @@ class DotenvLoader
         $dotenv->load(self::getPath('.env'));
     }
 
-    protected static function getPath(string $node = ''): string
+    /**
+     * @param string $node optional additional node-string passable
+     *
+     * @return string
+     */
+    protected static function getPath(string $node = '')
     {
-        $rootPath = realpath($_SERVER['DOCUMENT_ROOT'].'/..');
-
-        if ('/' == $rootPath) {
-            $rootPath = $_SERVER['PWD'];
-        }
-
-        if ('' != $node) {
-            $rootPath .= '/'.$node;
-        }
-
-        if (str_starts_with($rootPath, '//')) {
-            $rootPath = $_SERVER['DOCUMENT_ROOT'].'/'.$node;
-        }
-
-        return $rootPath;
+        return Environment::getProjectPath().($node !== '' ? "/${node}" : '');
     }
 }
