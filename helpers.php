@@ -9,7 +9,9 @@ use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
-(new DotenvLoader())->postAutoloadDump();
+if (PHP_SAPI !== 'cli') {
+    (new DotenvLoader())->postAutoloadDump();
+}
 
 if (!function_exists('ll')) {
     /** @throws Exception */
