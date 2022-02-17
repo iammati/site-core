@@ -28,6 +28,6 @@ class DotenvLoader
      */
     protected static function getPath(string $node = '')
     {
-        return (Environment::getProjectPath() ?? '').$node;
+        return (Environment::getProjectPath() ?? '').'/'.$node;
     }
 }
