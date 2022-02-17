@@ -3,7 +3,9 @@
 use Site\Core\Configuration\DotenvLoader;
 
 (function () {
-    DotenvLoader::postAutoloadDump();
+    if (PHP_SAPI !== 'cli') {
+        DotenvLoader::postAutoloadDump();
+    }
 
     // Defining AJAX into $GLOBALS TYPO3_CONF_VARS
     if (!isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['site_core']['AJAX'])) {
