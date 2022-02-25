@@ -431,12 +431,13 @@ class TcaService
     /**
      * Automatically allows records to be saved on standard pages where $key contains 'tx_myext_domain_model_record'.
      *
-     * @param string $startsWith .sdfsdf
+     * @param string $startsWith
+     * @param bool $nameCondition
      */
-    public static function allowTablesStartsWith(string $startsWith)
+    public static function allowTablesStartsWith(string $startsWith, bool $nameCondition = true)
     {
         foreach ($GLOBALS['TCA'] as $key => $tca) {
-            if (str_starts_with($key, $startsWith) && str_contains($key, '_domain_model_')) {
+            if (str_starts_with($key, $startsWith) && ($nameCondition ? str_contains($key, '_domain_model_') : true)) {
                 ExtensionManagementUtility::allowTableOnStandardPages($key);
             }
         }
