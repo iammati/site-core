@@ -94,7 +94,7 @@ class LocalizationService
                 $identifier = 'default';
             }
 
-            $extPath = GeneralUtility::getFileAbsFileName('typo3conf/ext/'.$extKey).'/';
+            $extPath = ExtensionManagementUtility::extPath($extKey);
             $definitionPath = $extPath.$definition;
 
             $localizations = [];
