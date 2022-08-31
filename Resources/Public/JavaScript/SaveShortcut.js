@@ -1,6 +1,6 @@
 /** @credits https://bitbucket.org/t--3/save */
 
-define(['ckeditor', 'jquery'], function (CKEDITOR, $) {
+define('TYPO3/CMS/SiteCore/SaveShortcut', ['ckeditor', 'jquery'], function (CKEDITOR, $) {
     'use strict';
 
     // Registers event for CTRL+S shortcut, when TBE_EDITOR is available.

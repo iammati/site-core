@@ -2,7 +2,7 @@
  * Registers a simple CTRL+R which is always available
  * and automatically reload the iframe of the TYPO3 backend,
  */
-define([
+define('TYPO3/CMS/SiteCore/ReloadShortcut', [
     'ckeditor',
     'jquery',
     'TYPO3/CMS/Backend/Modal',

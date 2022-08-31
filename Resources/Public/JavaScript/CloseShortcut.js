@@ -2,7 +2,7 @@
  * Based on ./SaveShortcut.js - just a way to leave the
  * edit-/create view of a new record faster.
  */
-define(['ckeditor', 'jquery'], function (CKEDITOR, $) {
+define('TYPO3/CMS/SiteCore/CloseShortcut', ['ckeditor', 'jquery'], function (CKEDITOR, $) {
     'use strict';
 
     // Registers event for ESC shortcut, when TBE_EDITOR is available.
