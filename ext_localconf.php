@@ -41,9 +41,7 @@ use Site\Core\Configuration\DotenvLoader;
         1607344341
     );
 
-    if (TYPO3_MODE === 'BE') {
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['Backend\Template\Components\ButtonBar']['getButtonsHook'][] = Site\Core\Hook\ButtonBarHook::class.'->loadRequireJsModule';
-    }
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['Backend\Template\Components\ButtonBar']['getButtonsHook'][] = Site\Core\Hook\ButtonBarHook::class.'->loadRequireJsModule';
 
     include \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('site_core', 'helpers.php');
 
