@@ -1,0 +1,14 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  Site\Core\:
+    resource: '../Classes/*'
+
+  Site\Core\Configuration\Event\ModifyNewContentElementWizardItems:
+    tags:
+      - name: event.listener
+        identifier: 'site-core/modify-new-content-element-wizard-items'
+        event: TYPO3\CMS\Backend\Controller\Event\ModifyNewContentElementWizardItemsEvent
