@@ -4,7 +4,7 @@
 - Simplified the way to [create way faster new Content-Elements](https://site-core.readthedocs.io/en/main/services/tca-service/)
 - An easier way of rendering custom Content-Elements via ["Frontend-Rendering-Engine"](https://site-core.readthedocs.io/en/main/rendering/engine/) (also PSR-14 Events!)
 - Includes a bunch of custom utility-classes as services
-- Will always support LTS versions of both TYPO3 and PHP - currently v11.5 and v8.1
+- Will always support LTS versions of both TYPO3 and PHP - currently v12 and v8.2
 
 ## Why would I need this
 I've developed this extension primarily only the due to the TcaService class since I struggled/didn't enjoy copy&paste TCA arrays - especially those `Table properties (ctrl)` arrays. That one big array you need for the usage of inline records, which you place inside e.g. `EXT:site_core/Configuration/TCA/Overrides/my_domain_model.php` and basically returns an array of configured ctrl stuff.
