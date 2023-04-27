@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Site\Core\View;
 
 use Exception;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Fluid\View\TemplatePaths;
@@ -42,6 +43,10 @@ class TYPO3StandaloneView
         $view->getRenderingContext()->setTemplatePaths($templatePaths);
         $view->getRenderingContext()->setControllerName($controllerName);
         $view->getRenderingContext()->setControllerAction($actionName);
+
+        /** @var ServerRequestInterface */
+        $request = $GLOBALS['TYPO3_REQUEST'];
+        $view->getRenderingContext()->setRequest($request);
 
         return $view;
     }
