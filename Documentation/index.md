@@ -6,8 +6,8 @@ writing down <a href="https://docs.typo3.org/m/typo3/reference-tca/main/en-us/" 
 
 ## System Requirements
 
-* PHP +8.1
-* TYPO3 +11.5
+* PHP +8.2
+* TYPO3 +12.4
 
 ## Installation
 
